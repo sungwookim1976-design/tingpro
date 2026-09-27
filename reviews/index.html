@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객후기 | 틴팅 마스터 VULUX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00B4D8;
+            --primary-dark: #0077B6;
+            --primary-light: #E0F7FA;
+            --secondary: #0F172A;
+            --accent: #FF6B35;
+            --accent-hover: #E85D04;
+            --text-main: #1E293B;
+            --text-muted: #475569;
+            --bg-light: #F8FAFC;
+            --border-color: #E2E8F0;
+            --radius-md: 14px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 12px 28px -6px rgba(0, 180, 216, 0.12);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+        body { background-color: #FFFFFF; color: var(--text-main); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        .top-banner { background: linear-gradient(90deg, #0077B6 0%, #00B4D8 100%); color: white; padding: 8px 16px; text-align: center; font-size: 0.875rem; font-weight: 600; }
+        
+        .header { position: sticky; top: 0; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); }
+        .header-container { width: 100%; max-width: 100%; padding: 14px 40px; display: flex; justify-content: space-between; align-items: center; }
+        .logo-img { height: 48px; border-radius: 12px; }
+        .gnb { display: flex; flex: 1; justify-content: center; gap: 40px; align-items: center; }
+        .gnb li a { font-size: 0.95rem; font-weight: 700; color: #334155; padding: 8px 4px; position: relative; display: inline-flex; align-items: center; gap: 6px; }
+        .gnb li a:hover, .gnb li a.active { color: var(--primary-dark); }
+        .gnb li a.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--primary); border-radius: 3px; }
+        .gnb-badge { font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; }
+        .gnb-badge.hot { background: #EF4444; color: white; }
+        .gnb-badge.new { background: #10B981; color: white; }
+
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 20px; font-size: 0.95rem; font-weight: 700; border-radius: var(--radius-md); border: none; cursor: pointer; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; }
+        .btn-outline { background: transparent; border: 1.5px solid var(--primary-dark); color: var(--primary-dark); }
+        .btn-accent { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%); color: white; }
+
+        .sub-hero { background: linear-gradient(135deg, #E0F2FE 0%, #F0F9FF 100%); padding: 60px 24px; text-align: center; border-bottom: 1px solid #E0F2FE; }
+        .sub-hero h1 { font-size: 2.5rem; font-weight: 900; color: var(--secondary); margin-bottom: 12px; }
+        .sub-hero p { font-size: 1.1rem; color: var(--text-muted); }
+
+        .container { max-width: 1280px; margin: 0 auto; padding: 60px 24px; }
+
+        /* Footer */
+        .footer { background: #0F172A; color: #94A3B8; padding: 60px 24px 30px 24px; font-size: 0.9rem; margin-top: 80px; }
+        .footer-container { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; margin-bottom: 40px; }
+        .footer h4, .footer h5 { color: white; }
+        .footer-bottom { max-width: 1280px; margin: 0 auto; border-top: 1px solid #1E293B; padding-top: 24px; display: flex; justify-content: space-between; font-size: 0.8rem; }
+
+        @media (max-width: 1024px) { .gnb { display: none !important; } }
+    </style>
+</head>
+<body>
+    <div class="top-banner">
+        <span>2026년 가을 맞이 썬팅 시공 20% 특별 할인 + 무료 방문 실측 진행 중!</span>
+    </div>
+    <header class="header">
+        <div class="header-container">
+            <a href="../index.html"><img src="../imgs/logo.png" alt="로고" class="logo-img"></a>
+            <ul class="gnb">
+                <li><a href="../about/" class="">회사소개</a></li>
+                <li><a href="../services/" class="">필름 라인업</a></li>
+                <li><a href="../calculator/" class="">실시간 견적 <span class="gnb-badge hot">HOT</span></a></li>
+                <li><a href="../gallery/" class="">시공사례</a></li>
+                <li><a href="../process/" class="">역경매 위탁 <span class="gnb-badge new">NEW</span></a></li>
+                <li><a href="../reviews/" class="active">고객후기</a></li>
+                <li><a href="../contact/" class="">오시는길</a></li>
+            </ul>
+            <div style="display:flex; gap:12px; align-items:center;">
+                <a href="tel:1544-0000" style="font-weight:800; color:var(--secondary); background:#F1F5F9; padding:8px 16px; border-radius:99px;"><i class="fa-solid fa-phone" style="color:var(--primary-dark);"></i> 1544-0000</a>
+                <a href="../calculator/" class="btn btn-primary">무료 견적신청</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="sub-hero">
+        <h1>생생 시공 후기 및 평가</h1>
+        <p>실제 베란다 및 건물 썬팅 시공을 받으신 고객님들의 솔직한 후기입니다.</p>
+    </div>
+
+    
+        <div class="container">
+            <h2 style="font-size:2rem; font-weight:900; text-align:center; margin-bottom:36px; color:var(--secondary);">실제 고객 만족도 리뷰</h2>
+
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;">
+                <div style="background:white; border:1px solid #E2E8F0; padding:28px; border-radius:var(--radius-md); box-shadow:var(--shadow-sm);">
+                    <div style="color:#F59E0B; margin-bottom:12px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p style="font-size:0.95rem; margin-bottom:20px; line-height:1.6;">"여름철 거실 실내 온도가 체감상 4도 이상 차이가 나네요! 눈부심도 완벽히 사라져서 삶의 질이 수직 상승했습니다."</p>
+                    <div style="font-weight:800; font-size:0.9rem;">서초 래미안 김*진 님</div>
+                </div>
+
+                <div style="background:white; border:1px solid #E2E8F0; padding:28px; border-radius:var(--radius-md); box-shadow:var(--shadow-sm);">
+                    <div style="color:#F59E0B; margin-bottom:12px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p style="font-size:0.95rem; margin-bottom:20px; line-height:1.6;">"역경매 시스템 덕분에 예상했던 예산보다 훨씬 저렴하게 시공했어요. 마스터님도 정말 친절하셨습니다."</p>
+                    <div style="font-weight:800; font-size:0.9rem;">판교 IT 테크노밸리 이*우 대표</div>
+                </div>
+
+                <div style="background:white; border:1px solid #E2E8F0; padding:28px; border-radius:var(--radius-md); box-shadow:var(--shadow-sm);">
+                    <div style="color:#F59E0B; margin-bottom:12px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p style="font-size:0.95rem; margin-bottom:20px; line-height:1.6;">"아파트 1층이라 사생활 보호 미러 필름을 시공했는데 외부에서는 안 보이고 실내에서는 선명해서 최고입니다!"</p>
+                    <div style="font-weight:800; font-size:0.9rem;">송파 아시아선수촌 박*혜 님</div>
+                </div>
+            </div>
+        </div>
+        
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <h4 style="font-size:1.4rem; font-weight:900; margin-bottom:12px;">TINTING MASTER</h4>
+                <p>아파트 베란다 및 건물 썬팅 전문 플랫폼 (주)틴팅프로</p>
+                <p style="font-size:0.85rem; margin-top:8px;">대표이사: 홍길동 | 사업자등록번호: 123-86-00000</p>
+            </div>
+            <div>
+                <h5 style="margin-bottom:12px;">바로가기</h5>
+                <ul>
+                    <li><a href="../about/">회사소개</a></li>
+                    <li><a href="../services/">필름 라인업</a></li>
+                    <li><a href="../calculator/">실시간 견적계산기</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 style="margin-bottom:12px;">시공 서비스</h5>
+                <ul>
+                    <li><a href="../gallery/">시공 사례</a></li>
+                    <li><a href="../process/">역경매 위탁</a></li>
+                    <li><a href="../reviews/">고객후기</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 style="margin-bottom:12px;">고객센터</h5>
+                <p style="font-size:1.5rem; font-weight:900; color:white;">1544-0000</p>
+                <p style="font-size:0.85rem;">평일 09:00 ~ 18:00 (무료 방문실측 상담)</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>© 2026 TINTING MASTER. All Rights Reserved.</div>
+            <div style="display:flex; gap:16px;">
+                <a href="#">개인정보처리방침</a>
+                <a href="#">이용약관</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

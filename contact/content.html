@@ -1,0 +1,150 @@
+<style>
+    .comm-tab-btn { padding:10px 22px; font-size:0.95rem; }
+    .comm-list { display:none; }
+    .comm-list.active { display:block; }
+    .comm-row { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:18px 4px; border-bottom:1px solid #E2E8F0; }
+    .comm-row:last-child { border-bottom:none; }
+    .comm-row-title { font-weight:700; color:#0F172A; display:flex; align-items:center; gap:10px; flex:1; }
+    .comm-badge { font-size:0.72rem; padding:3px 9px; border-radius:4px; font-weight:800; flex-shrink:0; }
+    .comm-date { font-size:0.82rem; color:var(--text-muted); flex-shrink:0; white-space:nowrap; }
+    .comm-answer { font-size:0.82rem; color:var(--primary-dark); font-weight:700; flex-shrink:0; white-space:nowrap; }
+    @media (max-width:640px) {
+        .comm-row { flex-wrap:wrap; }
+        .comm-date, .comm-answer { width:100%; text-align:left; }
+    }
+</style>
+
+<div style="background:white; border:1px solid #E2E8F0; border-radius:var(--radius-lg); padding:36px; box-shadow:var(--shadow-sm); margin-bottom:48px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:8px;">
+        <h2 style="font-size:1.6rem; font-weight:900; color:var(--secondary);">커뮤니티</h2>
+        <div style="display:flex; gap:10px;">
+            <button id="commTabBtn-notice" class="btn comm-tab-btn <?php echo $active_tab === 'notice' ? 'btn-primary' : 'btn-outline'; ?>" onclick="switchCommTab('notice')">
+                <i class="fa-solid fa-bullhorn"></i> 공지사항
+            </button>
+            <button id="commTabBtn-news" class="btn comm-tab-btn <?php echo $active_tab === 'news' ? 'btn-primary' : 'btn-outline'; ?>" onclick="switchCommTab('news')">
+                <i class="fa-solid fa-newspaper"></i> 뉴스
+            </button>
+            <button id="commTabBtn-faq" class="btn comm-tab-btn <?php echo $active_tab === 'faq' ? 'btn-primary' : 'btn-outline'; ?>" onclick="switchCommTab('faq')">
+                <i class="fa-solid fa-circle-question"></i> FAQ
+            </button>
+        </div>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:12px;">틴팅 마스터의 소식과 자주 묻는 질문을 확인하세요.</p>
+
+    <!-- 공지사항 -->
+    <ul id="commList-notice" class="comm-list <?php echo $active_tab === 'notice' ? 'active' : ''; ?>">
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#E0F7FA; color:var(--primary-dark);">공지</span> 2026년 가을 맞이 베란다·건물 썬팅 20% 특별 할인 이벤트</div>
+            <span class="comm-date">2026.09.20</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#E0F7FA; color:var(--primary-dark);">안내</span> 틴팅 마스터 모바일 정품 보증서 발급 시스템 오픈</div>
+            <span class="comm-date">2026.09.15</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#FEF3C7; color:#D97706;">소식</span> VULUX Sputter Dual 99 신규 프리미엄 라인업 입고</div>
+            <span class="comm-date">2026.09.10</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#E0F7FA; color:var(--primary-dark);">안내</span> 추석 연휴 기간 방문 실측 및 고객센터 운영 안내</div>
+            <span class="comm-date">2026.09.05</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#E0F7FA; color:var(--primary-dark);">모집</span> 전문 틴팅 마스터 프리랜서 & 기업 파트너 모집</div>
+            <span class="comm-date">2026.09.01</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#FEE2E2; color:#B91C1C;">점검</span> 시스템 정기 점검 안내 (9/28 02:00~04:00)</div>
+            <span class="comm-date">2026.08.28</span>
+        </li>
+    </ul>
+
+    <!-- 뉴스 -->
+    <ul id="commList-news" class="comm-list <?php echo $active_tab === 'news' ? 'active' : ''; ?>">
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#ECFDF5; color:#059669;">수상</span> 틴팅 마스터, 2026 대한민국 인테리어 대상 '썬팅 시공 부문' 수상</div>
+            <span class="comm-date">2026.09.12</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#FEF3C7; color:#D97706;">이슈</span> "폭염 대비 창호 썬팅 수요 급증"... 틴팅 마스터 예약 3배 증가</div>
+            <span class="comm-date">2026.08.20</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#E0F7FA; color:var(--primary-dark);">성장</span> 틴팅 마스터, 전국 프리랜서 마스터 500명 돌파</div>
+            <span class="comm-date">2026.08.05</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#ECFDF5; color:#059669;">인증</span> VULUX 필름, 국내 최초 KS 인증 획득</div>
+            <span class="comm-date">2026.07.22</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#E0F7FA; color:var(--primary-dark);">제휴</span> 틴팅 마스터-대형 건설사 업무협약(MOU) 체결, 신축 아파트 공동 시공</div>
+            <span class="comm-date">2026.07.10</span>
+        </li>
+    </ul>
+
+    <!-- FAQ -->
+    <ul id="commList-faq" class="comm-list <?php echo $active_tab === 'faq' ? 'active' : ''; ?>">
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#FFEDD5; color:#EA580C;">Q</span> 베란다 썬팅 시공 시간은 얼마나 걸리나요?</div>
+            <span class="comm-answer">30평형 기준 2~3시간</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#FFEDD5; color:#EA580C;">Q</span> 자가설치 DIY와 위탁 시공의 차이는 무엇인가요?</div>
+            <span class="comm-answer">위탁 시공은 10년 보증 제공</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#FFEDD5; color:#EA580C;">Q</span> 썬팅 필름 시공 후 창문 청소는 바로 가능한가요?</div>
+            <span class="comm-answer">3일 후 권장</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#FFEDD5; color:#EA580C;">Q</span> 겨울철 단열 효과도 기대할 수 있나요?</div>
+            <span class="comm-answer">실내 온기 약 30% 차단</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#FFEDD5; color:#EA580C;">Q</span> 무료 방문 실측 서비스는 어떻게 신청하나요?</div>
+            <span class="comm-answer">접수 후 10분 내 연락</span>
+        </li>
+        <li class="comm-row">
+            <div class="comm-row-title"><span class="comm-badge" style="background:#FFEDD5; color:#EA580C;">Q</span> 역경매 시스템은 어떻게 이용하나요?</div>
+            <span class="comm-answer">견적 계산기에서 접수 후 매칭</span>
+        </li>
+    </ul>
+</div>
+
+<script>
+    function switchCommTab(tab) {
+        ['notice', 'news', 'faq'].forEach(function (t) {
+            document.getElementById('commList-' + t).classList.toggle('active', t === tab);
+            document.getElementById('commTabBtn-' + t).className = 'btn comm-tab-btn ' + (t === tab ? 'btn-primary' : 'btn-outline');
+        });
+        if (window.history.replaceState) {
+            var url = new URL(window.location);
+            url.searchParams.set('tab', tab);
+            window.history.replaceState({}, '', url);
+        }
+    }
+</script>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:48px; background:white; border:1px solid #E2E8F0; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-md);">
+                <div style="background:linear-gradient(135deg, #0077B6 0%, #00B4D8 100%); color:white; padding:48px;">
+                    <h3 style="font-size:1.8rem; font-weight:900; margin-bottom:16px;">본사 고객센터 & 위치</h3>
+                    <p style="opacity:0.9; margin-bottom:32px;">전국 어디서나 전문 마스터가 무료 방문 실측 서비스를 준비합니다.</p>
+                    <div style="margin-bottom:20px;"><strong style="display:block;">대표 전화</strong><span style="font-size:1.6rem; font-weight:900;">1544-0000</span></div>
+                    <div><strong style="display:block;">본사 주소</strong><span>서울특별시 강남구 테헤란로 123 틴팅타워 5층</span></div>
+                </div>
+                <div style="padding:48px;">
+                    <h4 style="font-size:1.3rem; font-weight:800; margin-bottom:20px; color:var(--secondary);">무료 방문 실측 신청</h4>
+                    <form onsubmit="event.preventDefault(); alert('무료 방문 실측 신청이 완료되었습니다!');">
+                        <div style="margin-bottom:16px;">
+                            <label style="display:block; font-weight:700; margin-bottom:6px;">성함 / 연락처 *</label>
+                            <input type="text" placeholder="홍길동 (010-0000-0000)" required style="width:100%; padding:12px; border:1px solid #CBD5E1; border-radius:var(--radius-md);">
+                        </div>
+                        <div style="margin-bottom:16px;">
+                            <label style="display:block; font-weight:700; margin-bottom:6px;">시공 장소 주소 *</label>
+                            <input type="text" placeholder="예: 서울시 서초구 서초동 아파트" required style="width:100%; padding:12px; border:1px solid #CBD5E1; border-radius:var(--radius-md);">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%; padding:14px;">무료 방문 실측 신청하기</button>
+                    </form>
+                </div>
+            </div>

@@ -1,0 +1,65 @@
+<?php
+$db_reviews = array();
+if (isset($conn) && $conn) {
+    $res_rev = @mysqli_query($conn, "SELECT c.*, q.space_type, q.addr, q.film_name, q.py FROM case_comments c LEFT JOIN quotes q ON c.case_no = q.no ORDER BY c.no DESC");
+    if ($res_rev && mysqli_num_rows($res_rev) > 0) {
+        while ($r = mysqli_fetch_assoc($res_rev)) {
+            $db_reviews[] = $r;
+        }
+    }
+}
+?>
+
+<h2 style="font-size:2rem; font-weight:900; text-align:center; margin-bottom:12px; color:var(--secondary);">실제 고객 만족도 리뷰</h2>
+<p style="text-align:center; color:var(--text-muted); margin-bottom:36px;">시공사례에 등록된 생생한 고객 실시간 리뷰 및 평점입니다.</p>
+
+<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;">
+<?php if (!empty($db_reviews)): ?>
+    <?php foreach ($db_reviews as $rev): 
+        $st = (int)$rev['rating'];
+        if ($st <= 0) $st = 5;
+        $sp_type = !empty($rev['space_type']) ? $rev['space_type'] : '아파트';
+        $case_no = (int)$rev['case_no'];
+        $tbl_type = !empty($rev['tbl_type']) ? $rev['tbl_type'] : 'quote';
+        $detail_link = "../gallery/index.php?cat=" . urlencode($sp_type) . "&tab=" . $tbl_type . "&no=" . $case_no;
+    ?>
+        <div style="background:white; border:1px solid #E2E8F0; padding:28px; border-radius:var(--radius-md); box-shadow:var(--shadow-sm); display:flex; flex-direction:column; justify-content:space-between; cursor:pointer;" onclick="location.href='<?php echo $detail_link; ?>'">
+            <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <div style="color:#F59E0B; font-size:1.05rem;">
+                        <?php for ($i=0; $i<$st; $i++): ?><i class="fa-solid fa-star"></i><?php endfor; ?>
+                    </div>
+                    <span style="background:#E0F7FA; color:var(--primary-dark); font-size:0.75rem; font-weight:800; padding:3px 8px; border-radius:4px;"><?php echo htmlspecialchars($sp_type); ?></span>
+                </div>
+                <p style="font-size:0.95rem; margin-bottom:16px; line-height:1.6; color:#334155; font-weight:500;">
+                    "<?php echo htmlspecialchars($rev['content']); ?>"
+                </p>
+            </div>
+            <div style="border-top:1px dashed #E2E8F0; padding-top:12px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-weight:800; font-size:0.88rem; color:#0F172A;">
+                    <i class="fa-solid fa-user-check" style="color:#059669;"></i> <?php echo htmlspecialchars($rev['writer_name']); ?>
+                </div>
+                <a href="<?php echo $detail_link; ?>" style="font-size:0.8rem; font-weight:800; color:var(--primary-dark); text-decoration:none;" onclick="event.stopPropagation();">
+                    시공사례 보기 &rarr;
+                </a>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <div style="background:white; border:1px solid #E2E8F0; padding:28px; border-radius:var(--radius-md); box-shadow:var(--shadow-sm);">
+        <div style="color:#F59E0B; margin-bottom:12px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <p style="font-size:0.95rem; margin-bottom:20px; line-height:1.6;">"여름철 거실 실내 온도가 체감상 4도 이상 차이가 나네요! 눈부심도 완벽히 사라져서 삶의 질이 수직 상승했습니다."</p>
+        <div style="font-weight:800; font-size:0.9rem;">서초 래미안 김*진 님</div>
+    </div>
+    <div style="background:white; border:1px solid #E2E8F0; padding:28px; border-radius:var(--radius-md); box-shadow:var(--shadow-sm);">
+        <div style="color:#F59E0B; margin-bottom:12px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <p style="font-size:0.95rem; margin-bottom:20px; line-height:1.6;">"역경매 시스템 덕분에 예상했던 예산보다 훨씬 저렴하게 시공했어요. 마스터님도 정말 친절하셨습니다."</p>
+        <div style="font-weight:800; font-size:0.9rem;">판교 IT 테크노밸리 이*우 대표</div>
+    </div>
+    <div style="background:white; border:1px solid #E2E8F0; padding:28px; border-radius:var(--radius-md); box-shadow:var(--shadow-sm);">
+        <div style="color:#F59E0B; margin-bottom:12px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <p style="font-size:0.95rem; margin-bottom:20px; line-height:1.6;">"아파트 1층이라 사생활 보호 미러 필름을 시공했는데 외부에서는 안 보이고 실내에서는 선명해서 최고입니다!"</p>
+        <div style="font-weight:800; font-size:0.9rem;">송파 아시아선수촌 박*혜 님</div>
+    </div>
+<?php endif; ?>
+</div>

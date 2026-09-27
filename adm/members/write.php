@@ -1,0 +1,174 @@
+<?php
+$page_title = "회원 신규 등록";
+$active_page = "members";
+$adm_path_prefix = "../";
+$site_path_prefix = "../../";
+
+include_once __DIR__ . "/../../inc/dbconn.php";
+include_once __DIR__ . "/../inc/auth_check.php";
+include_once __DIR__ . "/../inc/adm_head.php";
+?>
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+function execDaumPostcode() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            var addr = '';
+            var extraAddr = '';
+
+            if (data.userSelectedType === 'R') {
+                addr = data.roadAddress;
+            } else {
+                addr = data.jibunAddress;
+            }
+
+            if (data.userSelectedType === 'R') {
+                if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                    extraAddr += data.bname;
+                }
+                if (data.buildingName !== '' && data.apartment === 'Y') {
+                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                if (extraAddr !== '') {
+                    extraAddr = ' (' + extraAddr + ')';
+                }
+            }
+
+            document.getElementById('zipcode').value = data.zonecode;
+            document.getElementById('addr1').value = addr + extraAddr;
+            document.getElementById('addr2').focus();
+        }
+    }).open();
+}
+</script>
+
+<div style="margin-bottom:20px;">
+    <a href="index.php" class="adm-btn adm-btn-outline" style="padding:6px 14px; font-size:0.85rem;"><i class="fa-solid fa-arrow-left"></i> 목록으로 돌아가기</a>
+</div>
+
+<div class="adm-form-box" style="max-width:100%;">
+    <h3 style="margin-bottom:20px; font-size:1.1rem; font-weight:800; border-bottom:1px solid var(--adm-border); padding-bottom:12px;">
+        <i class="fa-solid fa-user-plus" style="color:var(--adm-primary);"></i> 회원 신규 등록
+    </h3>
+    <form action="proc.php" method="post" onsubmit="return validateMemberForm(this);">
+        <input type="hidden" name="mode" value="insert">
+
+        <div class="adm-form-row">
+            <label for="mem_type">회원 유형 <span style="color:#EF4444;">*</span></label>
+            <select id="mem_type" name="mem_type" onchange="toggleMemTypeFields(this.value)" required>
+                <option value="customer">수요고객</option>
+                <option value="freelance">프리랜서</option>
+                <option value="corporate">기업</option>
+                <option value="partner">대리점</option>
+            </select>
+        </div>
+
+        <div class="adm-form-row">
+            <label for="email">아이디 (이메일 주소) <span style="color:#EF4444;">*</span></label>
+            <input type="email" id="email" name="email" placeholder="example@email.com (로그인 아이디로 사용)" required autofocus>
+        </div>
+
+        <div class="adm-form-row">
+            <label for="passwd">비밀번호 <span style="color:#EF4444;">*</span></label>
+            <input type="password" id="passwd" name="passwd" placeholder="4자 이상 입력" required>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="adm-form-row">
+                <label for="name">이름 / 담당자명 <span style="color:#EF4444;">*</span></label>
+                <input type="text" id="name" name="name" placeholder="회원 이름 입력" required>
+            </div>
+            <div class="adm-form-row">
+                <label for="hphone">연락처 <span style="color:#EF4444;">*</span></label>
+                <input type="text" id="hphone" name="hphone" placeholder="010-0000-0000" required>
+            </div>
+        </div>
+
+        <div class="adm-form-row">
+            <label for="zipcode">우편번호 / 주소 검색</label>
+            <div style="display:flex; gap:8px;">
+                <input type="text" id="zipcode" name="zipcode" placeholder="우편번호" readonly style="width:140px; background:#F8FAFC;">
+                <button type="button" onclick="execDaumPostcode()" class="adm-btn adm-btn-outline" style="padding:8px 14px; font-size:0.85rem;"><i class="fa-solid fa-magnifying-glass"></i> 우편번호 검색</button>
+            </div>
+        </div>
+
+        <div class="adm-form-row">
+            <label for="addr1">주소</label>
+            <input type="text" id="addr1" name="addr1" placeholder="우편번호 검색 시 자동 입력됩니다." readonly style="background:#F8FAFC; margin-bottom:8px;">
+            <input type="text" id="addr2" name="addr2" placeholder="상세 주소 입력">
+        </div>
+
+        <!-- 프리랜서 전용 필드 -->
+        <div id="freelance_fields" style="display:none; background:#FFFBEB; padding:16px; border-radius:10px; border:1px solid #FCD34D; margin-bottom:16px;">
+            <h4 style="font-size:0.88rem; color:#B45309; margin-bottom:12px;"><i class="fa-solid fa-briefcase"></i> 프리랜서 추가 정보</h4>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div class="adm-form-row" style="margin-bottom:0;">
+                    <label for="region">활동 지역</label>
+                    <input type="text" id="region" name="region" placeholder="예: 서울 강남구 / 경기 성남시">
+                </div>
+                <div class="adm-form-row" style="margin-bottom:0;">
+                    <label for="career">경력 정보</label>
+                    <input type="text" id="career" name="career" placeholder="예: 틴팅 경력 5년">
+                </div>
+            </div>
+        </div>
+
+        <!-- 기업/대리점 전용 필드 -->
+        <div id="partner_fields" style="display:none; background:#ECFDF5; padding:16px; border-radius:10px; border:1px solid #6EE7B7; margin-bottom:16px;">
+            <h4 style="font-size:0.88rem; color:#047857; margin-bottom:12px;"><i class="fa-solid fa-building"></i> 기업/대리점 사업자 정보</h4>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div class="adm-form-row" style="margin-bottom:0;">
+                    <label for="biz_name">상호 / 기업명</label>
+                    <input type="text" id="biz_name" name="biz_name" placeholder="상호명 입력">
+                </div>
+                <div class="adm-form-row" style="margin-bottom:0;">
+                    <label for="biz_no">사업자등록번호</label>
+                    <input type="text" id="biz_no" name="biz_no" placeholder="000-00-00000">
+                </div>
+            </div>
+        </div>
+
+        <div class="adm-form-row">
+            <label for="mem_state">계정 상태</label>
+            <select id="mem_state" name="mem_state">
+                <option value="1">정상 (이용 가능)</option>
+                <option value="0">정지 (이용 제한)</option>
+            </select>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:28px;">
+            <button type="submit" class="adm-btn" style="flex:1; justify-content:center; padding:12px; font-size:0.95rem;"><i class="fa-solid fa-check"></i> 회원 등록 완료</button>
+            <a href="index.php" class="adm-btn adm-btn-outline" style="padding:12px 20px; font-size:0.95rem;">취소</a>
+        </div>
+    </form>
+</div>
+
+<script>
+function toggleMemTypeFields(val) {
+    document.getElementById('freelance_fields').style.display = (val === 'freelance') ? 'block' : 'none';
+    document.getElementById('partner_fields').style.display = (val === 'partner' || val === 'corporate') ? 'block' : 'none';
+}
+
+function validateMemberForm(f) {
+    if (!f.email.value.trim() || !f.email.value.includes('@')) {
+        alert('올바른 이메일 주소(아이디)를 입력해 주세요.');
+        f.email.focus();
+        return false;
+    }
+    if (f.passwd.value.length < 4) {
+        alert('비밀번호는 4자 이상 입력해 주세요.');
+        f.passwd.focus();
+        return false;
+    }
+    if (!f.name.value.trim() || !f.hphone.value.trim()) {
+        alert('이름과 연락처를 입력해 주세요.');
+        return false;
+    }
+    return true;
+}
+</script>
+
+<?php
+include_once __DIR__ . "/../inc/adm_foot.php";
+?>

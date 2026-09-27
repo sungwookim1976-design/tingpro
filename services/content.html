@@ -1,0 +1,156 @@
+<style>
+    .film-gallery { display:grid; grid-template-columns:repeat(2, 1fr); gap:32px; margin-bottom:60px; }
+    .film-gallery-card { background:#fff; border:1px solid var(--border-color); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-sm); transition:all 0.3s ease; }
+    .film-gallery-card:hover { box-shadow:var(--shadow-md); transform:translateY(-4px); }
+    .film-gallery-img { position:relative; height:240px; background:#0F172A; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .film-gallery-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+    .film-gallery-card:hover .film-gallery-img img { transform:scale(1.05); }
+    .film-gallery-badge { position:absolute; top:16px; left:16px; background:var(--secondary); color:#fff; padding:5px 14px; border-radius:var(--radius-full); font-size:0.8rem; font-weight:700; }
+    .film-gallery-body { padding:28px; }
+    .film-gallery-title { font-size:1.35rem; font-weight:800; color:var(--secondary); margin-bottom:8px; }
+    .film-gallery-desc { font-size:0.9rem; color:var(--text-muted); margin-bottom:18px; line-height:1.6; }
+    .film-gallery-specs { display:grid; grid-template-columns:repeat(2, 1fr); gap:12px; background:#F8FAFC; padding:14px; border-radius:var(--radius-md); margin-bottom:18px; font-size:0.85rem; }
+    .film-gallery-specs .lbl { color:var(--text-muted); display:block; }
+    .film-gallery-specs .val { font-weight:800; color:var(--primary-dark); }
+
+    @media (max-width:768px) {
+        .film-gallery { grid-template-columns:1fr; }
+    }
+</style>
+
+<h2 style="font-size:2rem; font-weight:900; text-align:center; margin-bottom:16px; color:var(--secondary);">용도별 추천 필름 제품 라인업</h2>
+<p style="text-align:center; color:var(--text-muted); margin-bottom:48px;">공간의 특성(아파트 베란다, 건물 오피스, 매장 1층)에 따라 맞춤 선택이 가능합니다.</p>
+
+<div class="film-gallery" id="sputter">
+    <div class="film-gallery-card">
+        <div class="film-gallery-img">
+            <img src="../imgs/vulux_xseries_thumb.svg" alt="VULUX X-Series Standard" onerror="this.src='../imgs/hero_balcony.png'">
+            <span class="film-gallery-badge">BEST HIT</span>
+        </div>
+        <div class="film-gallery-body">
+            <h3 class="film-gallery-title">VULUX X-Series Standard</h3>
+            <p class="film-gallery-desc">아파트 베란다 및 가정용 거실 추천 1위. 뛰어난 가성비와 탁월한 자외선 차단 능력.</p>
+            <div class="film-gallery-specs">
+                <div><span class="lbl">자외선 차단율</span><span class="val">99.9%</span></div>
+                <div><span class="lbl">열차단율(IR)</span><span class="val">85%</span></div>
+                <div><span class="lbl">보증기간</span><span class="val">10년</span></div>
+                <div><span class="lbl">권장 장소</span><span class="val">아파트 베란다</span></div>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <a href="../calculator/index.php?pid=1" class="btn btn-primary" style="flex:1;">견적보기</a>
+                <a href="https://youtu.be/eGtSTR-DdZs" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="flex:1; border-color:#EF4444; color:#EF4444; font-weight:700;"><i class="fa-brands fa-youtube" style="color:#EF4444;"></i> 동영상 보기</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="film-gallery-card">
+        <div class="film-gallery-img">
+            <img src="../imgs/rec_sputter_thumb.svg" alt="VULUX Sputter Dual 99" onerror="this.src='../imgs/building_office.png'">
+            <span class="film-gallery-badge" style="background:#8B5CF6;">PREMIUM</span>
+        </div>
+        <div class="film-gallery-body">
+            <h3 class="film-gallery-title">VULUX Sputter Dual 99</h3>
+            <p class="film-gallery-desc">빌딩 오피스 및 상가 통유리 전용. 강력한 태양열 반사 기능으로 냉난방비 절감 극대화.</p>
+            <div class="film-gallery-specs">
+                <div><span class="lbl">자외선 차단율</span><span class="val">99.9%</span></div>
+                <div><span class="lbl">열차단율(IR)</span><span class="val">95%</span></div>
+                <div><span class="lbl">보증기간</span><span class="val">10년</span></div>
+                <div><span class="lbl">권장 장소</span><span class="val">빌딩 · 상가</span></div>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <a href="../calculator/index.php?pid=11" class="btn btn-primary" style="flex:1;">견적보기</a>
+                <a href="https://youtu.be/eGtSTR-DdZs" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="flex:1; border-color:#EF4444; color:#EF4444; font-weight:700;"><i class="fa-brands fa-youtube" style="color:#EF4444;"></i> 동영상 보기</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="film-gallery-card">
+        <div class="film-gallery-img">
+            <img src="../imgs/rec_ceramic_thumb.svg" alt="VULUX Nano Ceramic Protect" onerror="this.src='../imgs/craftsman.png'">
+            <span class="film-gallery-badge" style="background:#10B981;">CERAMIC</span>
+        </div>
+        <div class="film-gallery-body">
+            <h3 class="film-gallery-title">VULUX Nano Ceramic Protect</h3>
+            <p class="film-gallery-desc">고층 아파트 및 주상복합 추천. 전파 간섭 없이 안정적인 단열 성능을 제공합니다.</p>
+            <div class="film-gallery-specs">
+                <div><span class="lbl">자외선 차단율</span><span class="val">99.9%</span></div>
+                <div><span class="lbl">열차단율(IR)</span><span class="val">92%</span></div>
+                <div><span class="lbl">보증기간</span><span class="val">10년</span></div>
+                <div><span class="lbl">권장 장소</span><span class="val">고층 아파트</span></div>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <a href="../calculator/index.php?pid=15" class="btn btn-primary" style="flex:1;">견적보기</a>
+                <a href="https://youtu.be/eGtSTR-DdZs" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="flex:1; border-color:#EF4444; color:#EF4444; font-weight:700;"><i class="fa-brands fa-youtube" style="color:#EF4444;"></i> 동영상 보기</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="film-gallery-card">
+        <div class="film-gallery-img">
+            <img src="../imgs/bluelight_thumb.svg" alt="Privacy Shield (미러형)" onerror="this.src='../imgs/sunout.png'">
+            <span class="film-gallery-badge" style="background:#0EA5E9;">PRIVACY</span>
+        </div>
+        <div class="film-gallery-body">
+            <h3 class="film-gallery-title">Privacy Shield (미러형)</h3>
+            <p class="film-gallery-desc">저층 아파트 1층 및 사생활 보호가 중요한 매장 추천. 외부 시선 완벽 차단.</p>
+            <div class="film-gallery-specs">
+                <div><span class="lbl">자외선 차단율</span><span class="val">99.0%</span></div>
+                <div><span class="lbl">열차단율(IR)</span><span class="val">75%</span></div>
+                <div><span class="lbl">보증기간</span><span class="val">7년</span></div>
+                <div><span class="lbl">권장 장소</span><span class="val">저층 · 매장 1층</span></div>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <a href="../calculator/index.php?pid=4" class="btn btn-primary" style="flex:1;">견적보기</a>
+                <a href="https://youtu.be/eGtSTR-DdZs" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="flex:1; border-color:#EF4444; color:#EF4444; font-weight:700;"><i class="fa-brands fa-youtube" style="color:#EF4444;"></i> 동영상 보기</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- VULUX Promotional Video Section (#video) -->
+<section id="video" style="padding-top:40px; margin-top:60px; border-top:1px solid #E2E8F0;">
+    <div style="text-align:center; max-width:760px; margin:0 auto 36px auto;">
+        <span style="background:#FEF3C7; color:#D97706; font-size:0.8rem; font-weight:800; padding:4px 12px; border-radius:var(--radius-full); text-transform:uppercase; letter-spacing:1px;">
+            <i class="fa-solid fa-circle-play"></i> Official Brand Video
+        </span>
+        <h2 style="font-size:2.2rem; font-weight:900; color:var(--secondary); margin-top:12px;">VULUX 프리미엄 필름 공식 홍보영상</h2>
+        <p style="color:var(--text-muted); font-size:1rem; margin-top:8px;">
+            최첨단 스퍼터링 공법으로 완성된 VULUX 필름의 강력한 열차단 시연 및 실제 아파트·건물 시공 현장을 영상으로 직접 확인해 보세요.
+        </p>
+    </div>
+
+    <!-- Video Grid / Container -->
+    <div style="background:#0F172A; border-radius:var(--radius-lg); padding:36px; color:white; box-shadow:0 20px 40px rgba(0,0,0,0.2); display:grid; grid-template-columns:1.2fr 0.8fr; gap:36px; align-items:center;">
+        <div style="position:relative; border-radius:14px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.4); background:#1E293B; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
+            <img src="../imgs/hero_balcony.png" alt="VULUX 시공 비디오 썸네일" style="width:100%; height:100%; object-fit:cover; opacity:0.85;">
+            <a href="https://youtu.be/eGtSTR-DdZs" target="_blank" rel="noopener noreferrer" style="position:absolute; inset:0; background:rgba(0,0,0,0.35); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; text-decoration:none; color:white;">
+                <div style="width:72px; height:72px; background:rgba(239, 68, 68, 0.95); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; box-shadow:0 0 25px rgba(239, 68, 68, 0.6); transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <i class="fa-brands fa-youtube" style="margin-left:2px;"></i>
+                </div>
+                <span style="margin-top:14px; font-weight:800; font-size:1.05rem; letter-spacing:0.5px;">VULUX 열차단 성능 시연 영상 보기 (YouTube) &rarr;</span>
+            </a>
+        </div>
+
+        <div>
+            <span style="color:#38BDF8; font-weight:800; font-size:0.85rem; text-transform:uppercase;">Key Features Highlight</span>
+            <h3 style="font-size:1.6rem; font-weight:900; margin:10px 0 16px 0; color:white; line-height:1.3;">
+                빛과 열을 지혜롭게 제어하는<br><span style="color:#38BDF8;">VULUX 기술의 혁신</span>
+            </h3>
+            <ul style="display:flex; flex-direction:column; gap:14px; font-size:0.95rem; color:#CBD5E1;">
+                <li style="display:flex; align-items:flex-start; gap:10px;">
+                    <i class="fa-solid fa-circle-check" style="color:#38BDF8; margin-top:3px;"></i>
+                    <span><strong>유해 자외선 99.9% 차단:</strong> 피부 노화 및 내부 인테리어 가구 변색 원천 방지</span>
+                </li>
+                <li style="display:flex; align-items:flex-start; gap:10px;">
+                    <i class="fa-solid fa-circle-check" style="color:#38BDF8; margin-top:3px;"></i>
+                    <span><strong>최대 95% 적외선(IR) 열차단:</strong> 여름철 태양열 유입 차단으로 실내 온도 3~5도 감소</span>
+                </li>
+                <li style="display:flex; align-items:flex-start; gap:10px;">
+                    <i class="fa-solid fa-circle-check" style="color:#38BDF8; margin-top:3px;"></i>
+                    <span><strong>초고투명 선명 시인성:</strong> 탁 트인 조망은 유지하면서 야간 사생활 시선 완벽 보호</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>

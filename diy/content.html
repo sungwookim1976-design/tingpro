@@ -1,0 +1,795 @@
+<style>
+    .diy-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+    }
+
+    .diy-card {
+        background: #fff;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .diy-card:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-4px);
+    }
+
+    .diy-img {
+        position: relative;
+        height: 200px;
+        background: #0F172A;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .diy-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .diy-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: var(--secondary);
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        font-weight: 700;
+        z-index: 2;
+    }
+
+    .diy-body {
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        justify-space-between;
+    }
+
+    .diy-name {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--secondary);
+        margin-bottom: 6px;
+    }
+
+    .diy-spec {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 14px;
+        line-height: 1.4;
+        min-height: 38px;
+    }
+
+    .diy-price {
+        font-size: 1.35rem;
+        font-weight: 900;
+        color: var(--primary-dark);
+        margin-bottom: 16px;
+    }
+
+    .diy-price span {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        margin-left: 4px;
+    }
+
+    .diy-note {
+        text-align: center;
+        color: var(--text-muted);
+        margin-bottom: 32px;
+    }
+
+    .cat-tab-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 9px 20px;
+        border-radius: 30px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        border: 1.5px solid var(--border-color);
+        background: #fff;
+        color: var(--text-color);
+        transition: all 0.2s ease;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .cat-tab-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary-dark);
+    }
+
+    .cat-tab-btn.active {
+        background: var(--primary-dark);
+        color: #fff;
+        border-color: var(--primary-dark);
+        box-shadow: 0 4px 12px rgba(0, 119, 182, 0.25);
+    }
+
+    @media (max-width:900px) {
+        .diy-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width:640px) {
+        .diy-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<?php
+// ai_category 중분류 (depth=2) 시공관련 하위 카테고리 로딩
+$sub_categories = array();
+$res_sub = mysqli_query($conn, "SELECT * FROM ai_category WHERE depth=2 AND use_yn=1 ORDER BY sort_order ASC, idx ASC");
+if ($res_sub && mysqli_num_rows($res_sub) > 0) {
+    while ($r = mysqli_fetch_assoc($res_sub)) {
+        $sub_categories[] = $r;
+    }
+}
+
+// 중분류가 비어있는 경우 시공관련 4대 대표 중분류 자동 시딩 (아파트, 빌딩, 자동차, DIY자가설치)
+if (empty($sub_categories)) {
+    $parent_idx = 1;
+    $p_row = sql_one_one('ai_category', 'idx', "and depth=1 order by idx asc limit 1");
+    if ($p_row && isset($p_row['idx'])) {
+        $parent_idx = (int)$p_row['idx'];
+    }
+
+    mysqli_query($conn, "INSERT INTO ai_category (parent_idx, depth, cat_name, apply_target, sort_order, use_yn, reg_dt) VALUES
+    ($parent_idx, 2, '아파트', 'content', 1, 1, NOW()),
+    ($parent_idx, 2, '빌딩', 'content', 2, 1, NOW()),
+    ($parent_idx, 2, '자동차', 'content', 3, 1, NOW()),
+    ($parent_idx, 2, 'DIY자가설치', 'content', 4, 1, NOW())");
+
+    $res_sub = mysqli_query($conn, "SELECT * FROM ai_category WHERE depth=2 AND use_yn=1 ORDER BY sort_order ASC, idx ASC");
+    if ($res_sub) {
+        while ($r = mysqli_fetch_assoc($res_sub)) {
+            $sub_categories[] = $r;
+        }
+    }
+}
+
+$cat_filter = isset($_GET['cat']) ? trim($_GET['cat']) : '';
+
+$where = "and state=1";
+$target_name = $cat_filter;
+$target_idx = 0;
+
+if ($cat_filter !== '') {
+    $cat_esc = mysqli_real_escape_string($conn, $cat_filter);
+    
+    // idx 또는 cat_name 매핑
+    $cat_item = sql_one_one('ai_category', 'idx, cat_name', "and depth=2 and (idx='" . $cat_esc . "' or cat_name='" . $cat_esc . "')");
+    if ($cat_item && isset($cat_item['cat_name'])) {
+        $target_name = $cat_item['cat_name'];
+        $target_idx = (int)$cat_item['idx'];
+    }
+    
+    $target_esc = mysqli_real_escape_string($conn, $target_name);
+    
+    $cat_conds = array();
+    $cat_conds[] = "category='$cat_esc'";
+    if ($target_name !== '') {
+        $cat_conds[] = "category='$target_esc'";
+        $cat_conds[] = "category LIKE '%" . $target_esc . "%'";
+    }
+    if ($target_idx > 0) {
+        $cat_conds[] = "category='" . $target_idx . "'";
+    }
+
+    if (mb_strpos($target_name, '아파트') !== false || $cat_filter === 'apt') {
+        $cat_conds[] = "category='apt'";
+        $cat_conds[] = "category='아파트'";
+        $cat_conds[] = "category LIKE '%아파트%'";
+    }
+    if (mb_strpos($target_name, '빌딩') !== false || mb_strpos($target_name, '건물') !== false || $cat_filter === 'building') {
+        $cat_conds[] = "category='building'";
+        $cat_conds[] = "category='빌딩'";
+        $cat_conds[] = "category LIKE '%빌딩%'";
+        $cat_conds[] = "category LIKE '%건물%'";
+    }
+    if (mb_strpos($target_name, '자동차') !== false || mb_strpos($target_name, '차량') !== false || $cat_filter === 'car') {
+        $cat_conds[] = "category='car'";
+        $cat_conds[] = "category='자동차'";
+        $cat_conds[] = "category LIKE '%자동차%'";
+        $cat_conds[] = "category LIKE '%차량%'";
+    }
+    if (mb_strpos($target_name, 'DIY') !== false || mb_strpos($target_name, '자가') !== false || $cat_filter === 'diy') {
+        $cat_conds[] = "category='diy'";
+        $cat_conds[] = "category='DIY자가설치'";
+        $cat_conds[] = "category LIKE '%DIY%'";
+    }
+
+    $where .= " and (" . implode(" OR ", array_unique($cat_conds)) . ")";
+}
+
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$limit = 6;
+
+$total_cnt = sql_cnt('products', $where);
+
+$total_pages = max(1, (int)ceil($total_cnt / $limit));
+if ($page > $total_pages) $page = $total_pages;
+$offset = ($page - 1) * $limit;
+
+$db_products = sql_one('products', '*', "$where order by sort_order asc, no asc limit $offset, $limit");
+?>
+
+<div style="display:flex; justify-content:center; gap:10px; margin-bottom:32px; flex-wrap:wrap;">
+    <a href="?cat=" class="cat-tab-btn <?php echo $cat_filter === '' ? 'active' : ''; ?>"><i
+            class="fa-solid fa-boxes-stacked"></i> 전체 상품 보기</a>
+    <?php foreach ($sub_categories as $sc): 
+        $sc_val = (string)$sc['idx'];
+        $sc_name = $sc['cat_name'];
+        $is_act = ($cat_filter === $sc_val || $cat_filter === $sc_name || ($target_name !== '' && $target_name === $sc_name));
+        
+        $icon_cls = 'fa-tag';
+        if (mb_strpos($sc_name, '아파트') !== false) $icon_cls = 'fa-building-user';
+        elseif (mb_strpos($sc_name, '빌딩') !== false || mb_strpos($sc_name, '건물') !== false) $icon_cls = 'fa-city';
+        elseif (mb_strpos($sc_name, '자동차') !== false || mb_strpos($sc_name, '차량') !== false) $icon_cls = 'fa-car';
+        elseif (mb_strpos($sc_name, 'DIY') !== false || mb_strpos($sc_name, '자가') !== false) $icon_cls = 'fa-wrench';
+    ?>
+    <a href="?cat=<?php echo urlencode($sc_name); ?>" class="cat-tab-btn <?php echo $is_act ? 'active' : ''; ?>">
+        <i class="fa-solid <?php echo $icon_cls; ?>"></i>
+        <?php echo htmlspecialchars($sc_name); ?>
+    </a>
+    <?php endforeach; ?>
+</div>
+
+<p class="diy-note">시공 가이드 포함 · 실시간 견적으로 위탁 시공 비용도 함께 비교해 보세요 <a href="../calculator/index.php"
+        style="color:var(--primary-dark); font-weight:700;">실시간 견적 바로가기 &rarr;</a></p>
+
+<div class="diy-grid">
+    <?php if (empty($db_products)): ?>
+    <div
+        style="grid-column:1/-1; text-align:center; padding:60px 20px; background:#fff; border-radius:12px; border:1px solid var(--border-color); color:var(--text-muted);">
+        <i class="fa-solid fa-box-open" style="font-size:2.5rem; color:#CBD5E1; margin-bottom:12px; display:block;"></i>
+        등록된 상품이 없습니다.
+    </div>
+    <?php else: foreach ($db_products as $p): ?>
+    <?php
+            $thumb = !empty($p['thumb']) ? '../' . ltrim($p['thumb'], '/') : '../imgs/vulux_xseries_thumb.svg';
+            
+            $badge_text = 'BEST';
+            $badge_bg   = 'var(--secondary)';
+            
+            if (mb_strpos($p['name'], 'Sputter') !== false) {
+                $badge_text = 'PREMIUM';
+                $badge_bg   = '#8B5CF6';
+            } elseif (mb_strpos($p['name'], 'Ceramic') !== false) {
+                $badge_text = 'CERAMIC';
+                $badge_bg   = '#10B981';
+            } elseif (mb_strpos($p['name'], 'Privacy') !== false || mb_strpos($p['name'], '미러') !== false) {
+                $badge_text = 'PRIVACY';
+                $badge_bg   = '#0EA5E9';
+            } elseif ($p['category'] === 'apt') {
+                $badge_text = '아파트용';
+                $badge_bg   = '#0077B6';
+            } elseif ($p['category'] === 'building') {
+                $badge_text = '건물용';
+                $badge_bg   = '#0284C7';
+            }
+        ?>
+    <div class="diy-card">
+        <div class="diy-img">
+            <img src="<?php echo htmlspecialchars($thumb); ?>" alt="<?php echo htmlspecialchars($p['name']); ?>"
+                onerror="this.onerror=null; this.src='../imgs/hero_balcony.png';">
+            <span class="diy-badge" style="background:<?php echo $badge_bg; ?>;">
+                <?php echo $badge_text; ?>
+            </span>
+        </div>
+        <div class="diy-body">
+            <div>
+                <div class="diy-name">
+                    <?php echo htmlspecialchars($p['name']); ?>
+                </div>
+                <div class="diy-spec">
+                    <?php echo htmlspecialchars($p['spec'] ? $p['spec'] : '고성능 자외선/단열 차단 필름'); ?>
+                </div>
+            </div>
+            <div style="margin-top:16px;">
+                <div class="diy-price">
+                    <?php echo number_format($p['price']); ?><span>원 /
+                        <?php echo htmlspecialchars($p['price_unit'] ? $p['price_unit'] : '세트'); ?>
+                    </span>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <a href="../calculator/index.php?pid=<?php echo (int)$p['no']; ?>" class="btn btn-outline"
+                        style="flex:1; padding:10px 8px; font-size:0.9rem; font-weight:800; border-color:var(--primary-dark); color:var(--primary-dark); text-align:center; text-decoration:none;">
+                        <i class="fa-solid fa-calculator"></i> 견적보기
+                    </a>
+                    <button type="button" class="btn btn-primary"
+                        style="flex:1; padding:10px 8px; font-size:0.9rem; font-weight:800;"
+                        onclick="openOrderModal('<?php echo addslashes(htmlspecialchars($p['name'])); ?>', <?php echo (int)$p['price']; ?>)">
+                        <i class="fa-solid fa-cart-shopping"></i> 구매하기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endforeach; endif; ?>
+</div>
+
+<?php if ($total_pages > 1): ?>
+<div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-top:40px; margin-bottom:20px;">
+    <?php if ($page > 1): ?>
+    <a href="?cat=<?php echo urlencode($cat_filter); ?>&page=<?php echo $page - 1; ?>" class="cat-tab-btn"
+        style="padding:7px 14px; font-size:0.85rem;"><i class="fa-solid fa-chevron-left"></i> 이전</a>
+    <?php endif; ?>
+
+    <?php for ($p = 1; $p <= $total_pages; $p++): ?>
+    <a href="?cat=<?php echo urlencode($cat_filter); ?>&page=<?php echo $p; ?>"
+        class="cat-tab-btn <?php echo $p === $page ? 'active' : ''; ?>"
+        style="padding:7px 14px; font-size:0.85rem; min-width:36px; text-align:center;">
+        <?php echo $p; ?>
+    </a>
+    <?php endfor; ?>
+
+    <?php if ($page < $total_pages): ?>
+    <a href="?cat=<?php echo urlencode($cat_filter); ?>&page=<?php echo $page + 1; ?>" class="cat-tab-btn"
+        style="padding:7px 14px; font-size:0.85rem;">다음 <i class="fa-solid fa-chevron-right"></i></a>
+    <?php endif; ?>
+</div>
+<?php endif; ?>
+
+<!-- VULUX Promotional Video Section (#video) -->
+<section id="video" style="padding-top:40px; margin-top:50px; margin-bottom:50px; border-top:1px solid #E2E8F0;">
+    <div style="text-align:center; max-width:760px; margin:0 auto 36px auto;">
+        <span
+            style="background:#FEF3C7; color:#D97706; font-size:0.8rem; font-weight:800; padding:4px 12px; border-radius:var(--radius-full); text-transform:uppercase; letter-spacing:1px;">
+            <i class="fa-solid fa-circle-play"></i> Official Brand Video
+        </span>
+        <h2 style="font-size:2.2rem; font-weight:900; color:var(--secondary); margin-top:12px;">VULUX 프리미엄 필름 공식 홍보영상
+        </h2>
+        <p style="color:var(--text-muted); font-size:1rem; margin-top:8px;">
+            최첨단 스퍼터링 공법으로 완성된 VULUX 필름의 강력한 열차단 시연 및 실제 아파트·건물 시공 현장을 영상으로 직접 확인해 보세요.
+        </p>
+    </div>
+
+    <!-- Video Grid / Container -->
+    <div class="video-grid-box"
+        style="background:#0F172A; border-radius:var(--radius-lg); padding:36px; color:white; box-shadow:0 20px 40px rgba(0,0,0,0.2); display:grid; grid-template-columns:1.2fr 0.8fr; gap:36px; align-items:center;">
+        <div style="position:relative; border-radius:14px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.4); background:#1E293B; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;"
+            id="diyVideoPlayerBox">
+            <img src="../imgs/hero_balcony.png" alt="VULUX 시공 비디오 썸네일"
+                style="width:100%; height:100%; object-fit:cover; opacity:0.85;">
+            <button type="button" onclick="playInplaceDiyVideo()"
+                style="position:absolute; inset:0; background:rgba(0,0,0,0.35); border:none; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; color:white; width:100%; text-align:center;">
+                <div style="width:72px; height:72px; background:rgba(239, 68, 68, 0.95); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; box-shadow:0 0 25px rgba(239, 68, 68, 0.6); transition:transform 0.3s;"
+                    onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <i class="fa-solid fa-play" style="margin-left:3px;"></i>
+                </div>
+                <span style="margin-top:14px; font-weight:800; font-size:1.05rem; letter-spacing:0.5px;">VULUX 열차단 성능 시연
+                    영상 재생하기 (클릭)</span>
+            </button>
+        </div>
+        <script>
+            function playInplaceDiyVideo() {
+                const box = document.getElementById('diyVideoPlayerBox');
+                if (box) {
+                    box.innerHTML = '<iframe src="https://www.youtube.com/embed/eGtSTR-DdZs?autoplay=1&rel=0" title="VULUX 홍보영상" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="width:100%; height:100%; border:0; border-radius:14px;"></iframe>';
+                }
+            }
+        </script>
+
+        <div>
+            <span style="color:#38BDF8; font-weight:800; font-size:0.85rem; text-transform:uppercase;">Key Features
+                Highlight</span>
+            <h3 style="font-size:1.6rem; font-weight:900; margin:10px 0 16px 0; color:white; line-height:1.3;">
+                빛과 열을 지혜롭게 제어하는<br><span style="color:#38BDF8;">VULUX 기술의 혁신</span>
+            </h3>
+            <ul style="display:flex; flex-direction:column; gap:14px; font-size:0.95rem; color:#CBD5E1;">
+                <li style="display:flex; align-items:flex-start; gap:10px;">
+                    <i class="fa-solid fa-circle-check" style="color:#38BDF8; margin-top:3px;"></i>
+                    <span><strong>유해 자외선 99.9% 차단:</strong> 피부 노화 및 내부 인테리어 가구 변색 원천 방지</span>
+                </li>
+                <li style="display:flex; align-items:flex-start; gap:10px;">
+                    <i class="fa-solid fa-circle-check" style="color:#38BDF8; margin-top:3px;"></i>
+                    <span><strong>최대 95% 적외선(IR) 열차단:</strong> 여름철 태양열 유입 차단으로 실내 온도 3~5도 감소</span>
+                </li>
+                <li style="display:flex; align-items:flex-start; gap:10px;">
+                    <i class="fa-solid fa-circle-check" style="color:#38BDF8; margin-top:3px;"></i>
+                    <span><strong>초고투명 선명 시인성:</strong> 탁 트인 조망은 유지하면서 야간 사생활 시선 완벽 보호</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- 실시간 견적 모달 (DIY) -->
+<div class="modal-overlay" id="diyCalcModal"
+    style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.65); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center; padding:20px;">
+    <div class="modal-card"
+        style="background:#fff; border-radius:16px; width:100%; max-width:540px; padding:32px; box-shadow:0 20px 40px rgba(0,0,0,0.25); position:relative;">
+        <button class="modal-close" onclick="closeDiyCalcModal()"
+            style="position:absolute; top:18px; right:18px; background:none; border:none; font-size:1.5rem; color:#64748B; cursor:pointer;">&times;</button>
+        <div style="text-align:center; margin-bottom:20px;">
+            <span
+                style="background:#E0F2FE; color:#0284C7; font-size:0.78rem; font-weight:800; padding:4px 12px; border-radius:20px; text-transform:uppercase;">Realtime
+                Quick Calculator</span>
+            <h3 style="font-size:1.5rem; font-weight:900; color:var(--secondary); margin-top:8px;" id="diyCalcFilmName">
+                상품 견적계산기</h3>
+            <p style="font-size:0.88rem; color:var(--text-muted);" id="diyCalcFilmSpec">평수에 따른 실시간 예상 시공 금액을 확인하세요.</p>
+        </div>
+
+        <div
+            style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:20px; margin-bottom:20px;">
+            <div style="margin-bottom:16px;">
+                <label
+                    style="font-size:0.88rem; font-weight:800; color:var(--secondary); display:block; margin-bottom:6px;">시공
+                    공간 선택</label>
+                <select id="diySpaceType" onchange="calcDiyTotal()"
+                    style="width:100%; padding:12px; border:1px solid #CBD5E1; border-radius:8px; font-size:0.95rem;">
+                    <option value="1.0">아파트 · 주택 베란다</option>
+                    <option value="1.15">건물 · 상가 · 사무실 (+15%)</option>
+                </select>
+            </div>
+
+            <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <label style="font-size:0.88rem; font-weight:800; color:var(--secondary);">공급/전용 평수</label>
+                    <div
+                        style="font-size:1.15rem; font-weight:900; color:#0077B6; background:#F0F9FF; padding:3px 12px; border-radius:16px; border:1px solid #BAE6FD;">
+                        <span id="diyPyText">32</span> <span
+                            style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">평</span>
+                    </div>
+                </div>
+                <input type="range" id="diyPyRange" value="32" min="10" max="100" step="1"
+                    oninput="updateDiyPy(this.value)"
+                    style="width:100%; height:8px; accent-color:#0077B6; cursor:pointer;">
+                <div
+                    style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); font-weight:700; margin-top:6px;">
+                    <span onclick="updateDiyPy(10)" style="cursor:pointer;">10평</span>
+                    <span onclick="updateDiyPy(25)" style="cursor:pointer; color:#0077B6;">25평</span>
+                    <span onclick="updateDiyPy(33)" style="cursor:pointer; color:#0077B6;">33평</span>
+                    <span onclick="updateDiyPy(50)" style="cursor:pointer; color:#0077B6;">50평</span>
+                    <span onclick="updateDiyPy(100)" style="cursor:pointer;">100평</span>
+                </div>
+            </div>
+        </div>
+
+        <div
+            style="background:linear-gradient(135deg, #0077B6 0%, #00B4D8 100%); color:white; border-radius:12px; padding:20px; text-align:center; margin-bottom:20px;">
+            <div style="font-size:0.85rem; opacity:0.9;">예상 시공 비용</div>
+            <div id="diyTotalPrice" style="font-size:2.2rem; font-weight:900; margin:6px 0;">1,120,000 원</div>
+            <div style="font-size:0.78rem; opacity:0.85;">* 부가세 별도 / 전문 마스터 방문 포함</div>
+        </div>
+
+        <div style="display:flex; gap:10px;">
+            <a href="#" id="diyGoCalcBtn" class="btn btn-accent"
+                style="flex:1; text-align:center; padding:12px; font-weight:800;">
+                <i class="fa-solid fa-calculator"></i> 무료 방문실측 신청하기
+            </a>
+            <button type="button" class="btn btn-outline" onclick="closeDiyCalcModal()"
+                style="padding:12px 18px;">닫기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let diyCurrentPricePy = 35000;
+
+    function openDiyCalcModal(prodNo, prodName, price, spec) {
+        diyCurrentPricePy = price || 35000;
+        document.getElementById('diyCalcFilmName').innerText = prodName + ' 실시간 견적';
+        document.getElementById('diyCalcFilmSpec').innerText = spec ? spec : '평수에 따른 실시간 예상 시공 금액을 확인하세요.';
+        document.getElementById('diyGoCalcBtn').href = '../calculator/index.php?pid=' + prodNo;
+        document.getElementById('diyPyRange').value = 32;
+        updateDiyPy(32);
+        document.getElementById('diyCalcModal').style.display = 'flex';
+    }
+
+    function closeDiyCalcModal() {
+        document.getElementById('diyCalcModal').style.display = 'none';
+    }
+
+    function updateDiyPy(val) {
+        document.getElementById('diyPyText').innerText = val;
+        document.getElementById('diyPyRange').value = val;
+        calcDiyTotal();
+    }
+
+    function calcDiyTotal() {
+        let py = parseInt(document.getElementById('diyPyRange').value) || 32;
+        let mult = parseFloat(document.getElementById('diySpaceType').value) || 1.0;
+        let total = Math.round((py * diyCurrentPricePy * mult) / 10000) * 10000;
+        document.getElementById('diyTotalPrice').innerText = total.toLocaleString() + ' 원';
+    }
+</script>
+
+<!-- 주문 모달 -->
+<div class="modal-overlay" id="orderModal">
+    <div class="modal-card">
+        <button class="modal-close" onclick="closeModal('orderModal')">&times;</button>
+        <h3 style="font-size:1.4rem; font-weight:800; color:var(--secondary); margin-bottom:4px;" id="orderProductName">
+            상품명</h3>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:20px;">DIY 필름 구매는 회원만 가능합니다.</p>
+
+        <?php if (empty($_SESSION['s_mem_id'])): ?>
+        <div
+            style="padding:24px; text-align:center; background:#F8FAFC; border-radius:var(--radius-md); border:1px solid #E2E8F0;">
+            <i class="fa-solid fa-lock"
+                style="font-size:1.6rem; color:var(--text-muted); margin-bottom:12px; display:block;"></i>
+            <p style="margin-bottom:16px; color:var(--text-muted);">로그인 후 주문을 진행할 수 있습니다.</p>
+            <a href="../member/login.php?redirect=<?php echo urlencode('../diy/index.php'); ?>" class="btn btn-primary"
+                style="width:100%;">로그인하러 가기</a>
+            <p style="margin-top:12px; font-size:0.85rem;">회원이 아니신가요? <a href="../member/join.php"
+                    style="color:var(--primary-dark); font-weight:700;">회원가입</a></p>
+        </div>
+        <?php else: ?>
+        <div id="orderAlert"
+            style="display:none; padding:12px 16px; border-radius:var(--radius-md); font-size:0.9rem; margin-bottom:16px;">
+        </div>
+
+        <!-- 시공/설치 방식 선택 라디오 버튼 -->
+        <div
+            style="background:#F8FAFC; border:1px solid #CBD5E1; border-radius:var(--radius-md); padding:16px; margin-bottom:16px;">
+            <label
+                style="font-size:0.88rem; font-weight:800; color:var(--secondary); display:block; margin-bottom:10px;">
+                <i class="fa-solid fa-sliders" style="color:#0077B6;"></i> 시공/설치 타입 선택 <span
+                    style="color:#EF4444;">*</span>
+            </label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <label
+                    style="display:flex; align-items:center; gap:8px; background:#fff; border:2px solid #0077B6; padding:12px 14px; border-radius:8px; cursor:pointer; transition:all 0.2s;"
+                    id="labelInstallDiy">
+                    <input type="radio" name="install_type" value="자가설치" checked onclick="toggleInstallType('자가설치')"
+                        style="accent-color:#0077B6; width:18px; height:18px;">
+                    <div>
+                        <strong style="display:block; font-size:0.92rem; color:#0F172A;">자가설치 (DIY)</strong>
+                        <span style="font-size:0.78rem; color:#64748B;">직접 시공 (필름 배송)</span>
+                    </div>
+                </label>
+
+                <label
+                    style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #CBD5E1; padding:12px 14px; border-radius:8px; cursor:pointer; transition:all 0.2s;"
+                    id="labelInstallConsign">
+                    <input type="radio" name="install_type" value="위탁설치" onclick="toggleInstallType('위탁설치')"
+                        style="accent-color:#0077B6; width:18px; height:18px;">
+                    <div>
+                        <strong style="display:block; font-size:0.92rem; color:#0F172A;">위탁설치 (전문시공)</strong>
+                        <span style="font-size:0.78rem; color:#0284C7; font-weight:700;">마스터 1:1 방문 시공</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div
+            style="display:flex; align-items:center; justify-content:space-between; background:#F8FAFC; padding:14px 16px; border-radius:var(--radius-md); margin-bottom:16px;">
+            <span style="font-weight:700; color:var(--text-muted);">수량</span>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <button type="button" onclick="changeOrderQty(-1)" class="btn btn-outline btn-sm"
+                    style="width:32px; padding:6px;">-</button>
+                <span id="orderQty" style="font-weight:800; min-width:20px; text-align:center;">1</span>
+                <button type="button" onclick="changeOrderQty(1)" class="btn btn-outline btn-sm"
+                    style="width:32px; padding:6px;">+</button>
+            </div>
+        </div>
+        <div
+            style="text-align:right; font-weight:800; color:var(--primary-dark); font-size:1.1rem; margin-bottom:20px;">
+            총 결제 예상금액: <span id="orderTotalPrice">0</span>원
+        </div>
+
+        <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+            <div>
+                <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:6px;">받으시는 분 <span
+                        style="color:#EF4444;">*</span></label>
+                <input type="text" id="orderName" placeholder="홍길동"
+                    style="width:100%; padding:12px; border:1px solid #CBD5E1; border-radius:var(--radius-md);">
+            </div>
+            <div>
+                <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:6px;">연락처 <span
+                        style="color:#EF4444;">*</span></label>
+                <input type="tel" id="orderPhone" placeholder="010-0000-0000"
+                    style="width:100%; padding:12px; border:1px solid #CBD5E1; border-radius:var(--radius-md);">
+            </div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+            <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:6px;">배송지 주소 <span
+                    style="color:#EF4444;">*</span></label>
+            <div style="display:flex; gap:8px; margin-bottom:8px;">
+                <input type="text" id="orderZipcode" placeholder="우편번호" readonly
+                    style="width:140px; padding:12px; border:1px solid #CBD5E1; border-radius:var(--radius-md); background:#F1F5F9;">
+                <button type="button" onclick="execOrderPostcode()" class="btn btn-outline"
+                    style="padding:0 18px; font-size:0.9rem; font-weight:800; white-space:nowrap;">
+                    <i class="fa-solid fa-magnifying-glass"></i> 주소 검색
+                </button>
+            </div>
+            <input type="text" id="orderAddr1" placeholder="우편번호 검색 시 자동 입력됩니다." readonly
+                style="width:100%; padding:12px; border:1px solid #CBD5E1; border-radius:var(--radius-md); background:#F1F5F9; margin-bottom:8px;">
+            <input type="text" id="orderAddr2" placeholder="상세주소 및 동·호수 입력"
+                style="width:100%; padding:12px; border:1px solid #CBD5E1; border-radius:var(--radius-md);">
+        </div>
+
+        <div style="margin-bottom:14px;">
+            <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:6px;">요청사항</label>
+            <input type="text" id="orderMemo" placeholder="선택 입력 (예: 부재시 문 앞에 놔주세요)"
+                style="width:100%; padding:12px; border:1px solid #CBD5E1; border-radius:var(--radius-md);">
+        </div>
+
+        <label
+            style="display:flex; align-items:flex-start; gap:8px; font-size:0.82rem; color:var(--text-muted); margin-bottom:18px;">
+            <input type="checkbox" id="orderAgree" style="margin-top:3px;">
+            개인정보 수집 및 이용에 동의합니다. 입력하신 정보는 주문/배송 목적으로만 사용됩니다. <span style="color:#EF4444;">(필수)</span>
+        </label>
+
+        <button type="button" class="btn btn-accent" id="orderSubmitBtn" style="width:100%; padding:14px;"
+            onclick="submitOrder()">
+            주문하기
+        </button>
+        <?php endif; ?>
+    </div>
+</div>
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    let orderProductName = '';
+    let orderProductPrice = 0;
+    let orderQty = 1;
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    function openOrderModal(productName, price) {
+        orderProductName = productName;
+        orderProductPrice = price;
+        orderQty = 1;
+        document.getElementById('orderProductName').innerText = productName;
+        var qtyEl = document.getElementById('orderQty');
+        if (qtyEl) qtyEl.innerText = orderQty;
+        updateOrderTotal();
+        const alertEl = document.getElementById('orderAlert');
+        if (alertEl) alertEl.style.display = 'none';
+        document.getElementById('orderModal').style.display = 'flex';
+    }
+
+    function changeOrderQty(delta) {
+        orderQty = Math.max(1, Math.min(50, orderQty + delta));
+        document.getElementById('orderQty').innerText = orderQty;
+        updateOrderTotal();
+    }
+
+    function updateOrderTotal() {
+        var totalEl = document.getElementById('orderTotalPrice');
+        if (totalEl) totalEl.innerText = (orderProductPrice * orderQty).toLocaleString();
+    }
+
+    function execOrderPostcode() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                var addr = '';
+                var extraAddr = '';
+
+                if (data.userSelectedType === 'R') {
+                    addr = data.roadAddress;
+                } else {
+                    addr = data.jibunAddress;
+                }
+
+                if (data.userSelectedType === 'R') {
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraAddr += data.bname;
+                    }
+                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    if (extraAddr !== '') {
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                }
+
+                document.getElementById('orderZipcode').value = data.zonecode;
+                document.getElementById('orderAddr1').value = addr + extraAddr;
+                document.getElementById('orderAddr2').focus();
+            }
+        }).open();
+    }
+
+    function showOrderAlert(ok, msg) {
+        const el = document.getElementById('orderAlert');
+        if (!el) return;
+        el.style.display = 'block';
+        el.style.background = ok ? '#ECFDF5' : '#FEF2F2';
+        el.style.border = '1px solid ' + (ok ? '#A7F3D0' : '#FECACA');
+        el.style.color = ok ? '#047857' : '#B91C1C';
+        el.innerText = msg;
+    }
+
+    function submitOrder() {
+        const name = document.getElementById('orderName').value.trim();
+        const phone = document.getElementById('orderPhone').value.trim();
+        const zipcode = document.getElementById('orderZipcode').value.trim();
+        const addr1 = document.getElementById('orderAddr1').value.trim();
+        const addr2 = document.getElementById('orderAddr2').value.trim();
+        const memo = document.getElementById('orderMemo').value.trim();
+        const agree = document.getElementById('orderAgree').checked;
+
+        const installTypeRadio = document.querySelector('input[name="install_type"]:checked');
+        const installType = installTypeRadio ? installTypeRadio.value : '자가설치';
+
+        if (!name || !phone) {
+            showOrderAlert(false, '받으시는 분과 연락처를 입력해 주세요.');
+            return;
+        }
+        if (!addr1) {
+            showOrderAlert(false, '배송지 주소를 검색해 입력해 주세요.');
+            return;
+        }
+        if (!agree) {
+            showOrderAlert(false, '개인정보 수집 및 이용에 동의해 주세요.');
+            return;
+        }
+
+        const btn = document.getElementById('orderSubmitBtn');
+        btn.disabled = true;
+        btn.innerText = '주문결제 페이지로 이동 중...';
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'checkout.php';
+
+        const params = {
+            product_name: orderProductName,
+            product_price: orderProductPrice,
+            qty: orderQty,
+            install_type: installType,
+            name: name,
+            hphone: phone,
+            zipcode: zipcode,
+            addr1: addr1,
+            addr2: addr2,
+            memo: memo
+        };
+
+        for (const key in params) {
+            const hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = key;
+            hiddenField.value = params[key];
+            form.appendChild(hiddenField);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        <?php if (!empty($_SESSION['s_mem_name'])): ?>
+        var oN = document.getElementById('orderName'); if (oN) oN.value = <?php echo json_encode($_SESSION['s_mem_name']); ?>;
+        <?php endif; ?>
+        <?php if (!empty($_SESSION['s_mem_hphone'])): ?>
+        var oP = document.getElementById('orderPhone'); if (oP) oP.value = <?php echo json_encode($_SESSION['s_mem_hphone']); ?>;
+        <?php endif; ?>
+        <?php if (!empty($_SESSION['s_mem_zipcode'])): ?>
+        var oZ = document.getElementById('orderZipcode'); if (oZ) oZ.value = <?php echo json_encode($_SESSION['s_mem_zipcode']); ?>;
+        <?php endif; ?>
+        <?php if (!empty($_SESSION['s_mem_addr1'])): ?>
+        var oA1 = document.getElementById('orderAddr1'); if (oA1) oA1.value = <?php echo json_encode($_SESSION['s_mem_addr1']); ?>;
+        <?php endif; ?>
+        <?php if (!empty($_SESSION['s_mem_addr2'])): ?>
+        var oA2 = document.getElementById('orderAddr2'); if (oA2) oA2.value = <?php echo json_encode($_SESSION['s_mem_addr2']); ?>;
+        <?php endif; ?>
+    });
+</script>
