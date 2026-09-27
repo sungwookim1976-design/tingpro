@@ -43,8 +43,14 @@ if (isset($conn) && $conn) {
 <!-- Header Navigation (GNB Include) -->
 <header class="header">
     <div class="header-container">
-        <a href="<?php echo $base_path; ?>index.php" class="logo-area">
-            <img src="<?php echo $base_path; ?>imgs/logo.png" alt="틴팅 마스터 로고" class="logo-img">
+        <a href="<?php echo $base_path; ?>index.php" class="text-logo-brand">
+            <div class="text-logo-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="text-logo-content">
+                <div class="text-logo-main">TINTING PRO<span class="accent">.</span></div>
+                <div class="text-logo-sub">VULUX MASTER</div>
+            </div>
         </a>
 
         <ul class="gnb">
@@ -129,8 +135,14 @@ if (isset($conn) && $conn) {
 <div class="mobile-drawer" id="mobileDrawer">
     <div>
         <div class="drawer-header">
-            <a href="<?php echo $base_path; ?>index.php" onclick="closeMobileDrawer()">
-                <img src="<?php echo $base_path; ?>imgs/logo.png" alt="틴팅 마스터 로고" class="logo-img" style="height: 36px; border-radius: 8px;">
+            <a href="<?php echo $base_path; ?>index.php" class="text-logo-brand" onclick="closeMobileDrawer()">
+                <div class="text-logo-icon" style="width: 32px; height: 32px; font-size: 0.95rem; border-radius: 8px;">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="text-logo-content">
+                    <div class="text-logo-main" style="font-size: 1.1rem;">TINTING PRO<span class="accent">.</span></div>
+                    <div class="text-logo-sub" style="font-size: 0.58rem;">VULUX MASTER</div>
+                </div>
             </a>
             <button class="drawer-close-btn" onclick="closeMobileDrawer()" aria-label="메뉴 닫기">&times;</button>
         </div>
