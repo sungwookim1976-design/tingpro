@@ -699,7 +699,7 @@ function submitAuctionApply() {
 
 function submitBid(auctionNo) {
     const isLoggedIn = <?php echo !empty($_SESSION['s_mem_id']) ? 'true' : 'false'; ?>;
-    const isCustomer = <?php echo ($is_customer ?? false) ? 'true' : 'false'; ?>;
+    const isCustomer = <?php echo (!empty($is_customer)) ? 'true' : 'false'; ?>;
 
     if (!isLoggedIn) {
         if (confirm('입찰 제안 제출은 로그인 후 이용하실 수 있습니다.\n로그인 페이지로 이동하시겠습니까?')) {

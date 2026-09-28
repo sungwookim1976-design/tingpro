@@ -12,6 +12,33 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 date_default_timezone_set('Asia/Seoul');
 
+// PHP 5.6 / 7.4 / 8.x 호환성 환경 상수 및 헬퍼 함수
+if (!defined('PHP_VERSION_ID')) {
+    $v_parts = explode('.', PHP_VERSION);
+    define('PHP_VERSION_ID', ((int)$v_parts[0] * 10000 + (int)$v_parts[1] * 100 + (isset($v_parts[2]) ? (int)$v_parts[2] : 0)));
+}
+
+if (!function_exists('get_var')) {
+    /**
+     * PHP 5.6 / 7.4 / 8.x 통합 변수 추출 헬퍼 (PHP 5.6에서도 Null Coalescing ?? 효과)
+     */
+    function get_var(&$var, $default = null) {
+        return isset($var) ? $var : $default;
+    }
+}
+
+if (!function_exists('get_arr_val')) {
+    /**
+     * PHP 5.6 / 7.4 / 8.x 통합 배열 키 추출 헬퍼 (PHP 8.x Fatal Error 방지)
+     */
+    function get_arr_val($arr, $key, $default = '') {
+        if (is_array($arr) && array_key_exists($key, $arr) && $arr[$key] !== null) {
+            return $arr[$key];
+        }
+        return $default;
+    }
+}
+
 $hostname = "localhost";
 $db       = "corea27";
 $user     = "corea27";
