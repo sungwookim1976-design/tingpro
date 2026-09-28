@@ -8,6 +8,7 @@ include_once __DIR__ . "/../../inc/dbconn.php";
 include_once __DIR__ . "/../inc/auth_check.php";
 
 @mysqli_query($conn, "ALTER TABLE `products` MODIFY COLUMN `category` VARCHAR(100) NOT NULL DEFAULT ''");
+@mysqli_query($conn, "ALTER TABLE `products` ADD COLUMN `brand` VARCHAR(100) NOT NULL DEFAULT 'VULUX'");
 
 // ai_category 테이블 자동 생성 및 기본 대분류 시딩
 mysqli_query($conn, "CREATE TABLE IF NOT EXISTS `ai_category` (
@@ -267,6 +268,9 @@ include_once __DIR__ . "/../inc/adm_head.php";
                                 $full_cat_display = "상품분류 >> " . $sub_name;
                                 echo '<span class="adm-badge" style="background:#E0F2FE; color:#0369A1; font-weight:700;"><i class="fa-solid fa-folder-tree"></i> ' . htmlspecialchars($full_cat_display) . '</span>';
                                 ?>
+                                <div style="margin-top:4px; font-size:0.78rem; color:#475569; font-weight:700;">
+                                    <i class="fa-solid fa-tag" style="color:#D97706;"></i> 브랜드: <span style="color:#1E293B; font-weight:800;"><?php echo htmlspecialchars(!empty($p['brand']) ? $p['brand'] : 'VULUX'); ?></span>
+                                </div>
                             </td>
                             <td style="text-align:center;">
                                 <?php if ($p['thumb']): ?>

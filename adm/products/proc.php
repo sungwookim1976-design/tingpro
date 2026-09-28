@@ -46,6 +46,7 @@ function handle_thumb_upload($existing_thumb = '', $file_field = 'thumb_file') {
 if ($mode === 'insert') {
     $category   = trim(isset($_POST['category']) ? $_POST['category'] : '');
     if (!$category) $category = 'diy';
+    $brand      = trim(isset($_POST['brand']) ? $_POST['brand'] : 'VULUX');
     $name       = trim((isset($_POST['name']) ? $_POST['name'] : ''));
     $spec       = trim((isset($_POST['spec']) ? $_POST['spec'] : ''));
     $price      = intval((isset($_POST['price']) ? $_POST['price'] : 0));
@@ -77,6 +78,7 @@ if ($mode === 'insert') {
     }
 
     $fields = "category='" . mysqli_real_escape_string($conn, $category) . "', "
+            . "brand='" . mysqli_real_escape_string($conn, $brand) . "', "
             . "name='" . mysqli_real_escape_string($conn, $name) . "', "
             . "spec='" . mysqli_real_escape_string($conn, $spec) . "', "
             . "`desc`='" . mysqli_real_escape_string($conn, $desc) . "', "
@@ -107,6 +109,7 @@ elseif ($mode === 'update') {
     $no         = intval((isset($_POST['no']) ? $_POST['no'] : 0));
     $category   = trim(isset($_POST['category']) ? $_POST['category'] : '');
     if (!$category) $category = 'diy';
+    $brand      = trim(isset($_POST['brand']) ? $_POST['brand'] : 'VULUX');
     $name       = trim((isset($_POST['name']) ? $_POST['name'] : ''));
     $spec       = trim((isset($_POST['spec']) ? $_POST['spec'] : ''));
     $price      = intval((isset($_POST['price']) ? $_POST['price'] : 0));
@@ -140,6 +143,7 @@ elseif ($mode === 'update') {
     $thumb3 = handle_thumb_upload($thumb3_input !== '' ? $thumb3_input : ((isset($old_prod['thumb3']) ? $old_prod['thumb3'] : '')), 'thumb3_file');
 
     $fields = "category='" . mysqli_real_escape_string($conn, $category) . "', "
+            . "brand='" . mysqli_real_escape_string($conn, $brand) . "', "
             . "name='" . mysqli_real_escape_string($conn, $name) . "', "
             . "spec='" . mysqli_real_escape_string($conn, $spec) . "', "
             . "`desc`='" . mysqli_real_escape_string($conn, $desc) . "', "
@@ -193,6 +197,7 @@ elseif ($mode === 'copy_bulk') {
         if ($target) {
             $new_name = $target['name'] . " (복사본)";
             $fields = "category='" . mysqli_real_escape_string($conn, $target['category']) . "', "
+                    . "brand='" . mysqli_real_escape_string($conn, isset($target['brand']) ? $target['brand'] : 'VULUX') . "', "
                     . "name='" . mysqli_real_escape_string($conn, $new_name) . "', "
                     . "spec='" . mysqli_real_escape_string($conn, $target['spec']) . "', "
                     . "`desc`='" . mysqli_real_escape_string($conn, $target['desc']) . "', "

@@ -71,16 +71,20 @@ function execDaumPostcode() {
         <div class="adm-form-row">
             <label for="mem_type">회원 유형 <span style="color:#EF4444;">*</span></label>
             <select id="mem_type" name="mem_type" onchange="toggleMemTypeFields(this.value)" required>
-                <option value="customer" <?php echo $m['mem_type'] === 'customer' ? 'selected' : ''; ?>>수요고객</option>
-                <option value="freelance" <?php echo $m['mem_type'] === 'freelance' ? 'selected' : ''; ?>>프리랜서</option>
-                <option value="corporate" <?php echo $m['mem_type'] === 'corporate' ? 'selected' : ''; ?>>기업</option>
-                <option value="partner" <?php echo $m['mem_type'] === 'partner' ? 'selected' : ''; ?>>대리점</option>
+                <option value="customer" <?php echo ($m['mem_type'] === 'customer' || $m['mem_type'] === 'cust' || $m['mem_type'] === '수요고객') ? 'selected' : ''; ?>>수요고객</option>
+                <option value="freelance" <?php echo ($m['mem_type'] === 'freelance' || $m['mem_type'] === 'free' || $m['mem_type'] === '프리랜서') ? 'selected' : ''; ?>>프리랜서</option>
+                <option value="corporate" <?php echo ($m['mem_type'] === 'corporate' || $m['mem_type'] === 'corp' || $m['mem_type'] === '기업') ? 'selected' : ''; ?>>기업</option>
+                <option value="partner" <?php echo ($m['mem_type'] === 'partner' || $m['mem_type'] === 'part' || $m['mem_type'] === '대리점') ? 'selected' : ''; ?>>대리점</option>
             </select>
         </div>
 
         <div class="adm-form-row">
             <label for="email">아이디 (이메일 주소) <span style="color:#EF4444;">*</span></label>
-            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($m['email'] ? $m['email'] : $m['uid']); ?>" required>
+            <div style="display:flex; gap:8px;">
+                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($m['email'] ? $m['email'] : $m['uid']); ?>" required oninput="resetEmailCheck()">
+                <button type="button" onclick="checkEmailDupEdit()" class="adm-btn adm-btn-outline" style="padding:8px 14px; font-size:0.85rem; white-space:nowrap; border-color:#0077B6; color:#0077B6;"><i class="fa-solid fa-magnifying-glass"></i> 중복검사</button>
+            </div>
+            <div id="email_dup_msg" style="font-size:0.8rem; margin-top:4px; font-weight:700;"></div>
         </div>
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
@@ -163,6 +167,54 @@ function execDaumPostcode() {
 </div>
 
 <script>
+const initialEmail = '<?php echo addslashes($m['email'] ? $m['email'] : $m['uid']); ?>';
+const memberNo = <?php echo (int)$m['no']; ?>;
+let isEmailChecked = true;
+
+function resetEmailCheck() {
+    const emailVal = document.getElementById('email').value.trim();
+    const msgEl = document.getElementById('email_dup_msg');
+    if (emailVal === initialEmail) {
+        isEmailChecked = true;
+        msgEl.innerHTML = '';
+    } else {
+        isEmailChecked = false;
+        msgEl.style.color = '#D97706';
+        msgEl.innerHTML = '이메일(아이디) 변경됨. 중복검사를 진행해 주세요.';
+    }
+}
+
+function checkEmailDupEdit() {
+    const emailInput = document.getElementById('email');
+    const emailVal = emailInput.value.trim();
+    const msgEl = document.getElementById('email_dup_msg');
+
+    if (!emailVal || !emailVal.includes('@')) {
+        alert('올바른 이메일 주소를 입력해 주세요.');
+        emailInput.focus();
+        return;
+    }
+
+    fetch('../../member/check_email_ajax.php?email=' + encodeURIComponent(emailVal) + '&no=' + memberNo)
+        .then(res => res.json())
+        .then(data => {
+            if (data.exists) {
+                isEmailChecked = false;
+                msgEl.style.color = '#EF4444';
+                msgEl.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> ' + data.msg;
+                alert(data.msg);
+            } else {
+                isEmailChecked = true;
+                msgEl.style.color = '#059669';
+                msgEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + data.msg;
+                alert(data.msg);
+            }
+        })
+        .catch(err => {
+            alert('중복검사 중 오류가 발생했습니다.');
+        });
+}
+
 function toggleMemTypeFields(val) {
     document.getElementById('freelance_fields').style.display = (val === 'freelance') ? 'block' : 'none';
     document.getElementById('partner_fields').style.display = (val === 'partner' || val === 'corporate') ? 'block' : 'none';
@@ -171,6 +223,11 @@ function toggleMemTypeFields(val) {
 function validateEditForm(f) {
     if (!f.email.value.trim() || !f.email.value.includes('@')) {
         alert('올바른 이메일 주소(아이디)를 입력해 주세요.');
+        f.email.focus();
+        return false;
+    }
+    if (!isEmailChecked && f.email.value.trim() !== initialEmail) {
+        alert('이메일(아이디) 중복검사를 완료해 주세요.');
         f.email.focus();
         return false;
     }

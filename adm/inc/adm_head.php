@@ -73,6 +73,7 @@
         .adm-badge { display:inline-block; white-space:nowrap; font-size:0.72rem; font-weight:800; padding:3px 8px; border-radius:5px; line-height:1.3; vertical-align:middle; text-align:center; }
         .adm-badge.type-customer { background:#E0F7FA; color:#0077B6; }
         .adm-badge.type-freelance { background:#FEF3C7; color:#D97706; }
+        .adm-badge.type-corporate { background:#EEF2FF; color:#4F46E5; }
         .adm-badge.type-partner { background:#ECFDF5; color:#059669; }
         .adm-badge.state-신규, .adm-badge.state-주문접수, .adm-badge.state-입찰대기,
         .state-select.state-신규, .state-select.state-주문접수, .state-select.state-입찰대기 { background:#E0F7FA; color:#0077B6; }
@@ -109,7 +110,20 @@
 <body>
 <div class="adm-layout">
     <aside class="adm-sidebar">
-        <div class="adm-sidebar-logo"><i class="fa-solid fa-shield-halved"></i><span>TINTING ADMIN</span></div>
+        <div class="adm-sidebar-logo">
+            <svg viewBox="0 0 250 42" height="28" style="display:block; overflow:visible;">
+                <defs>
+                    <linearGradient id="nexfilSlashGradAdm" x1="0%" y1="100%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#DC2626" />
+                        <stop offset="35%" stop-color="#EA580C" />
+                        <stop offset="70%" stop-color="#F59E0B" />
+                        <stop offset="100%" stop-color="#FDE047" />
+                    </linearGradient>
+                </defs>
+                <text x="0" y="33" font-family="'Pretendard', 'Montserrat', 'Arial Black', sans-serif" font-weight="900" font-style="italic" font-size="33" fill="#EF4444" letter-spacing="-0.8">TINTING PRO<tspan fill="#EF4444">.</tspan></text>
+                <polygon points="112,41 124,41 168,0 156,0" fill="url(#nexfilSlashGradAdm)" />
+            </svg>
+        </div>
         <?php $ap = isset($adm_path_prefix) ? $adm_path_prefix : ''; $active = (isset($active_page) ? $active_page : ''); ?>
         <nav class="adm-nav">
             <a href="<?php echo $ap; ?>index.php" class="<?php echo $active === 'dashboard' ? 'active' : ''; ?>"><i class="fa-solid fa-gauge"></i> 대시보드</a>

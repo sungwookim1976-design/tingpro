@@ -223,7 +223,7 @@ if ($detail_no > 0):
                 <span style="background:rgba(255,255,255,0.15); color:white; font-size:0.8rem; padding:4px 10px; border-radius:4px; font-weight:700;"><i class="fa-solid fa-check-double"></i> <?php echo $tab === 'quote' ? '견적완료 시공사례' : '매칭완료 시공사례'; ?></span>
             </div>
             <h1 style="font-size:2rem; font-weight:900; margin-bottom:8px;"><?php echo htmlspecialchars($area); ?> <?php echo (int)$single_case['py']; ?>평 <?php echo htmlspecialchars($single_case['space_type']); ?> 프리미엄 단열필름 시공</h1>
-            <p style="opacity:0.85; font-size:0.95rem;"><i class="fa-regular fa-calendar-check"></i> 시공완료일: <?php echo substr($single_case['reg_date'], 0, 10); ?> | VULUX 공식 인증 마스터 시공팀 진행 | 첨부파일 <?php echo count($case_imgs); ?>장</p>
+            <p style="opacity:0.85; font-size:0.95rem;"><i class="fa-regular fa-calendar-check"></i> 시공완료일: <?php echo substr($single_case['reg_date'], 0, 10); ?> | 공식 인증 마스터 시공팀 진행 | 첨부파일 <?php echo count($case_imgs); ?>장</p>
         </div>
 
         <div class="case-spec-grid">
@@ -245,7 +245,7 @@ if ($detail_no > 0):
             </div>
         </div>
 
-        <div style="padding:36px; display:grid; grid-template-columns:1fr 1fr; gap:36px;">
+        <div class="case-detail-body mobile-grid-1col" style="padding:36px; display:grid; grid-template-columns:1fr 1fr; gap:36px;">
             <div>
                 <img id="detailMainCaseImg" src="<?php echo htmlspecialchars($case_imgs[0]); ?>" alt="첫번째 첨부 이미지" style="width:100%; height:320px; object-fit:cover; border-radius:var(--radius-md); box-shadow:var(--shadow-sm); border:1px solid #E2E8F0; transition:all 0.2s;">
                 
@@ -412,7 +412,7 @@ endif;
 <!-- 2. 시공사례 포트폴리오 리스트 뷰 -->
 <!-- ------------------------------------------------------------- -->
 <h2 style="font-size:2rem; font-weight:900; text-align:center; margin-bottom:12px; color:var(--secondary);">최근 시공 포트폴리오</h2>
-<p style="text-align:center; color:var(--text-muted); margin-bottom:28px;">VULUX 전문 시공팀이 완성한 실제 현장별 시공 사례입니다.</p>
+<p style="text-align:center; color:var(--text-muted); margin-bottom:28px;">전문 시공팀이 완성한 실제 현장별 시공 사례입니다.</p>
 
 <?php
 $cat_where = get_cat_where_clause($cat);
@@ -445,14 +445,14 @@ $cases = sql_one($target_tbl, '*', $where . " order by no desc limit $offset, $l
 ?>
 
 <!-- 카테고리 필터 탭 -->
-<div class="case-filter">
+<div class="case-filter mobile-tab-scroll">
     <?php foreach ($cat_label as $key => $label): ?>
         <a href="?cat=<?php echo urlencode($key); ?>&tab=<?php echo $tab; ?>" class="<?php echo $cat === $key ? 'active' : ''; ?>"><?php echo htmlspecialchars($label); ?></a>
     <?php endforeach; ?>
 </div>
 
 <!-- 견적시공 / 역경매시공 구분 탭 -->
-<div class="case-tab-bar">
+<div class="case-tab-bar mobile-tab-scroll">
     <a href="?cat=<?php echo urlencode($cat); ?>&tab=quote" class="case-tab-btn <?php echo $tab === 'quote' ? 'active' : ''; ?>">
         <i class="fa-solid fa-file-invoice"></i> 견적시공 사례 (<?php echo number_format($quote_cnt); ?>건)
     </a>
@@ -605,7 +605,7 @@ $cases = sql_one($target_tbl, '*', $where . " order by no desc limit $offset, $l
                     </div>
                 </div>
 
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
+                <div class="mobile-grid-1col" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
                     <div style="background:#F8FAFC; padding:14px; border-radius:10px; border:1px solid #E2E8F0;">
                         <strong style="color:#64748B; display:block; font-size:0.78rem;">총 시공비</strong>
                         <span style="color:#0077B6; font-size:1.35rem; font-weight:900;">${formattedPrice}원</span>
@@ -617,7 +617,7 @@ $cases = sql_one($target_tbl, '*', $where . " order by no desc limit $offset, $l
                 </div>
 
                 <h4 style="font-size:1.05rem; font-weight:800; color:#0F172A; margin-bottom:10px; border-bottom:2px solid #F1F5F9; padding-bottom:6px;"><i class="fa-solid fa-square-check" style="color:#0077B6;"></i> 시공 성능 스펙</h4>
-                <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; text-align:center; margin-bottom:20px;">
+                <div class="mobile-grid-1col" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; text-align:center; margin-bottom:20px;">
                     <div style="background:#F0F9FF; border:1px solid #BAE6FD; padding:10px; border-radius:8px;">
                         <span style="font-size:0.75rem; color:#0077B6; font-weight:700; display:block;">열차단율 (IR Cut)</span>
                         <strong style="font-size:1.1rem; color:#0F172A; font-weight:900;">95.8%</strong>
@@ -640,7 +640,7 @@ $cases = sql_one($target_tbl, '*', $where . " order by no desc limit $offset, $l
                     <p style="font-size:0.85rem; color:#78350F; margin:0;">"여름철 눈부심이 완벽히 해결되고 실내가 훨씬 서늘해졌습니다. 직영 시공팀의 마감이 아주 훌륭했습니다!"</p>
                 </div>
 
-                <div style="display:flex; gap:12px;">
+                <div class="mobile-grid-1col" style="display:flex; gap:12px;">
                     <a href="?cat=${currentCat}&tab=${tabType}&no=${item.no}" class="btn btn-outline" style="flex:1; text-align:center; padding:11px; font-weight:700;"><i class="fa-solid fa-up-right-from-square"></i> 상세 페이지로 이동</a>
                     <button onclick="closeModal('caseDetailModal'); openFreeVisitModal();" class="btn btn-accent" style="flex:1; padding:11px; font-weight:800;"><i class="fa-solid fa-paper-plane"></i> 1:1 방문 실측 신청</button>
                 </div>

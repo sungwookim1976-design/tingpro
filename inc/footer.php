@@ -27,9 +27,9 @@ if (function_exists('sql_one')) {
     <div class="footer-container">
         <div class="footer-brand">
             <div style="display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg, #0077B6 0%, #00B4D8 100%); color:#fff; font-size:0.78rem; font-weight:800; padding:4px 12px; border-radius:20px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,180,216,0.3);">
-                <i class="fa-solid fa-certificate"></i> TINTING MASTER VULUX 공식 대리점
+                <i class="fa-solid fa-certificate"></i> TINTING PRO 공식 대리점
             </div>
-            <h4 style="margin-bottom:6px;">TINTING MASTER VULUX</h4>
+            <h4 style="margin-bottom:6px;">TINTING PRO</h4>
             <p style="font-weight:700; color:#E0F7FA;">아파트 베란다 · 건물 썬팅 공식 대리점 &amp; 100% 품질보증제</p>
             <p style="margin-top: 12px; font-size: 0.85rem;">대표이사: 김성우 | 사업자등록번호: 408-33-33377</p>
             <p style="font-size: 0.85rem;">주소: 서울특별시 서초구 마방로4길 16-17 (양재동) | 통신판매업신고: 제 2026-서울서초-0000 호</p>
@@ -38,8 +38,8 @@ if (function_exists('sql_one')) {
         <div class="footer-links">
             <h5>서비스 메뉴</h5>
             <ul>
-                <li><a href="<?php echo $base_path; ?>about/index.php">VULUX 대리점소개</a></li>
-                <li><a href="<?php echo $base_path; ?>diy/index.php">VULUX 견적구매</a></li>
+                <li><a href="<?php echo $base_path; ?>about/index.php">대리점소개</a></li>
+                <li><a href="<?php echo $base_path; ?>diy/index.php">견적구매</a></li>
                 <li><a href="<?php echo $base_path; ?>gallery/index.php">시공사례</a></li>
                 <li><a href="<?php echo $base_path; ?>process/index.php#apply">역경매 마켓</a></li>
                 <li><a href="<?php echo $base_path; ?>comm/index.php">커뮤니티</a></li>
@@ -60,12 +60,12 @@ if (function_exists('sql_one')) {
             <h5>고객센터</h5>
             <p style="font-size: 1.5rem; font-weight: 900; color: white; margin-bottom: 8px;">1544-0000</p>
             <p>운영시간: 평일 09:00 - 18:00</p>
-            <p>이메일: support@tintingmaster.com</p>
+            <p>이메일: support@tintingpro.co.kr</p>
         </div>
     </div>
 
     <div class="footer-bottom">
-        <div>© 2026 TINTING MASTER. All Rights Reserved.</div>
+        <div>© 2026 TINTING PRO. All Rights Reserved.</div>
         <div style="display: flex; gap: 16px;">
             <a href="#">개인정보처리방침</a>
             <a href="#">이용약관</a>
@@ -181,6 +181,28 @@ if (function_exists('sql_one')) {
         document.getElementById('mobileDrawer').classList.remove('open');
         document.getElementById('mobileDrawerOverlay').classList.remove('open');
         document.body.style.overflow = '';
+    }
+    function toggleDrawerSub(el) {
+        var parent = el.parentElement;
+        if (!parent) return;
+        var sub = parent.querySelector('.drawer-sub-menu');
+        var arrow = el.querySelector('.drawer-arrow');
+        
+        if (sub) {
+            var isOpen = sub.style.display === 'block';
+            
+            document.querySelectorAll('.drawer-sub-menu').forEach(function(s) {
+                s.style.display = 'none';
+            });
+            document.querySelectorAll('.drawer-arrow').forEach(function(a) {
+                a.style.transform = 'rotate(0deg)';
+            });
+
+            if (!isOpen) {
+                sub.style.display = 'block';
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+            }
+        }
     }
     function openQuoteModal() { document.getElementById('quoteModal').style.display = 'flex'; }
     function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
@@ -363,6 +385,7 @@ if (function_exists('sql_one')) {
                 <div>
                     <label style="display:block; font-size:0.85rem; font-weight:800; color:#334155; margin-bottom:6px;">문의 종류 선택 <span style="color:#EF4444;">*</span></label>
                     <select name="order_type" id="modal_order_type" required style="width:100%; padding:11px; border:1px solid #CBD5E1; border-radius:8px; font-size:0.9rem;">
+                        <option value="간편견적">간편 견적 서비스</option>
                         <option value="건물썬팅">건물 썬팅 (아파트/사무실/베란다)</option>
                         <option value="유리교환">자동차 유리 교환 서비스</option>
                     </select>

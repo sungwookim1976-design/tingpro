@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$mem_type = in_array((isset($_POST['mem_type']) ? $_POST['mem_type'] : ''), ['customer', 'freelance', 'partner']) ? $_POST['mem_type'] : 'customer';
+$mem_type = in_array((isset($_POST['mem_type']) ? $_POST['mem_type'] : ''), ['customer', 'freelance', 'corporate', 'partner']) ? $_POST['mem_type'] : 'customer';
 $email    = trim((isset($_POST['email']) && $_POST['email'] !== '' ? $_POST['email'] : (isset($_POST['uid']) ? $_POST['uid'] : '')));
 $uid      = $email;
 $passwd   = (isset($_POST['passwd']) ? $_POST['passwd'] : '');

@@ -1,5 +1,5 @@
 <?php
-$page_title = "커뮤니티 | 틴팅 마스터 VULUX";
+$page_title = "커뮤니티 | TINTING PRO";
 $active_menu = "community";
 $path_prefix = "../";
 
@@ -15,6 +15,7 @@ $board_style = [
     'news'    => ['badge_bg' => '#ECFDF5', 'badge_color' => '#059669', 'cat_name' => '뉴스',     'author' => '홍보팀'],
     'faq'     => ['badge_bg' => '#FFEDD5', 'badge_color' => '#EA580C', 'cat_name' => 'FAQ',      'author' => '고객지원팀'],
     'consult' => ['badge_bg' => '#E0F2FE', 'badge_color' => '#0284C7', 'cat_name' => '상담문의',  'author' => '고객상담팀'],
+    'selfvod' => ['badge_bg' => '#ECFDF5', 'badge_color' => '#059669', 'cat_name' => 'DIY 셀프시공', 'author' => '시공기술팀'],
 ];
 
 // "고객후기"는 관리자에서 관리하는 게시판이 아니라 기존 정적 데이터를 그대로 유지
@@ -70,17 +71,17 @@ if ($active_tab === 'reviews') {
 }
 ?>
 
-<div style="background:linear-gradient(135deg, #0077B6 0%, #00B4D8 100%); padding:60px 24px; text-align:center; color:white;">
-    <span style="background:rgba(255,255,255,0.2); font-size:0.85rem; padding:4px 14px; border-radius:20px; font-weight:700; letter-spacing:1px; text-transform:uppercase;">VULUX Community</span>
-    <h1 style="font-size:2.5rem; font-weight:900; margin:12px 0 8px 0;">틴팅 마스터 커뮤니티</h1>
+<div class="sub-hero hero-mobile-pad" style="background:linear-gradient(135deg, #0077B6 0%, #00B4D8 100%); padding:60px 24px; text-align:center; color:white;">
+    <span style="background:rgba(255,255,255,0.2); font-size:0.85rem; padding:4px 14px; border-radius:20px; font-weight:700; letter-spacing:1px; text-transform:uppercase;">TINTING PRO Community</span>
+    <h1 style="font-size:2.5rem; font-weight:900; margin:12px 0 8px 0;">TINTING PRO 커뮤니티</h1>
     <p style="font-size:1.1rem; opacity:0.9; max-width:600px; margin:0 auto;">공지사항, 브랜드 소식, 자주 묻는 질문 및 생생한 고객 후기를 한눈에 확인하세요.</p>
 </div>
 
-<div class="container" style="max-width:1280px; margin:0 auto; padding:60px 24px;">
+<div class="container container-mobile-pad" style="max-width:1280px; margin:0 auto; padding:60px 24px;">
 
     <!-- Category Filter Tabs -->
-    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:32px; border-bottom:2px solid #E2E8F0; padding-bottom:16px;">
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <div class="comm-filter-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:32px; border-bottom:2px solid #E2E8F0; padding-bottom:16px;">
+        <div class="mobile-tab-scroll" style="display:flex; gap:10px; flex-wrap:wrap;">
             <a href="index.php?tab=all" class="btn <?php echo $active_tab === 'all' ? 'btn-primary' : 'btn-outline'; ?>" style="padding:10px 20px;">
                 <i class="fa-solid fa-list-ul"></i> 전체보기
             </a>
@@ -96,9 +97,12 @@ if ($active_tab === 'reviews') {
             <a href="index.php?tab=reviews" class="btn <?php echo $active_tab === 'reviews' ? 'btn-primary' : 'btn-outline'; ?>" style="padding:10px 20px;">
                 <i class="fa-solid fa-star"></i> 고객후기
             </a>
+            <a href="selfvod.php" class="btn btn-outline" style="padding:10px 20px;">
+                <i class="fa-solid fa-circle-play"></i> DIY 셀프 시공 영상
+            </a>
         </div>
 
-        <div style="display:flex; align-items:center; gap:8px;">
+        <div class="comm-search-box" style="display:flex; align-items:center; gap:8px;">
             <input type="text" id="commSearch" placeholder="게시글 검색..." style="padding:10px 16px; border:1px solid #CBD5E1; border-radius:var(--radius-md); font-size:0.9rem; width:220px;">
             <button class="btn btn-primary" style="padding:10px 16px;"><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
@@ -106,7 +110,7 @@ if ($active_tab === 'reviews') {
 
     <!-- Post Table List -->
     <div style="background:white; border:1px solid #E2E8F0; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-sm);">
-        <table style="width:100%; border-collapse:collapse; text-align:left;">
+        <table class="comm-table" style="width:100%; border-collapse:collapse; text-align:left;">
             <thead>
                 <tr style="background:#F8FAFC; border-bottom:1px solid #E2E8F0; color:#475569; font-size:0.9rem; font-weight:800;">
                     <th style="padding:16px 20px; width:70px; text-align:center;">번호</th>
@@ -123,13 +127,13 @@ if ($active_tab === 'reviews') {
                 <?php endif; ?>
                 <?php foreach ($filtered_posts as $post): ?>
                 <tr style="border-bottom:1px solid #F1F5F9; transition:background 0.2s ease;" onmouseover="this.style.background='#F0F9FF';" onmouseout="this.style.background='white';">
-                    <td style="padding:18px 20px; text-align:center; color:#94A3B8; font-weight:600;"><?php echo $post['id']; ?></td>
-                    <td style="padding:18px 20px; text-align:center;">
+                    <td class="col-num" style="padding:18px 20px; text-align:center; color:#94A3B8; font-weight:600;"><?php echo $post['id']; ?></td>
+                    <td class="col-cat" style="padding:18px 20px; text-align:center;">
                         <span style="background:<?php echo $post['badge_bg']; ?>; color:<?php echo $post['badge_color']; ?>; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:4px;">
                             <?php echo $post['cat_name']; ?>
                         </span>
                     </td>
-                    <td style="padding:18px 20px;">
+                    <td class="col-title" style="padding:18px 20px;">
                         <a href="view.php?id=<?php echo $post['id']; ?>&cat=<?php echo urlencode($post['cat']); ?>" style="text-decoration:none; color:#0F172A; font-weight:700; font-size:1.02rem; display:inline-flex; align-items:center; gap:8px;">
                             <?php echo htmlspecialchars($post['title']); ?>
                             <?php if ($post['has_img']): ?>
@@ -137,10 +141,15 @@ if ($active_tab === 'reviews') {
                             <?php endif; ?>
                         </a>
                         <p style="color:#64748B; font-size:0.85rem; margin-top:4px; font-weight:400;"><?php echo htmlspecialchars($post['summary']); ?></p>
+                        <div class="mobile-post-meta" style="display:none; gap:12px; font-size:0.8rem; color:#64748B; margin-top:8px;">
+                            <span><i class="fa-regular fa-user"></i> <?php echo htmlspecialchars($post['author']); ?></span>
+                            <span><i class="fa-regular fa-clock"></i> <?php echo $post['date']; ?></span>
+                            <span><i class="fa-regular fa-eye"></i> <?php echo number_format($post['views']); ?></span>
+                        </div>
                     </td>
-                    <td style="padding:18px 20px; text-align:center; color:#475569; font-size:0.9rem; font-weight:600;"><?php echo htmlspecialchars($post['author']); ?></td>
-                    <td style="padding:18px 20px; text-align:center; color:#64748B; font-size:0.85rem;"><?php echo $post['date']; ?></td>
-                    <td style="padding:18px 20px; text-align:center; color:#94A3B8; font-size:0.85rem;"><?php echo number_format($post['views']); ?></td>
+                    <td class="col-author" style="padding:18px 20px; text-align:center; color:#475569; font-size:0.9rem; font-weight:600;"><?php echo htmlspecialchars($post['author']); ?></td>
+                    <td class="col-date" style="padding:18px 20px; text-align:center; color:#64748B; font-size:0.85rem;"><?php echo $post['date']; ?></td>
+                    <td class="col-views" style="padding:18px 20px; text-align:center; color:#94A3B8; font-size:0.85rem;"><?php echo number_format($post['views']); ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

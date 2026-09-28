@@ -14,12 +14,12 @@ if ($pid > 0) {
 }
 ?>
 
-<div style="background:linear-gradient(135deg, #E0F2FE 0%, #F0F9FF 100%); padding:60px 24px; text-align:center; border-bottom:1px solid #E0F2FE;">
+<div class="sub-hero hero-mobile-pad" style="background:linear-gradient(135deg, #E0F2FE 0%, #F0F9FF 100%); padding:60px 24px; text-align:center; border-bottom:1px solid #E0F2FE;">
     <h1 style="font-size:2.5rem; font-weight:900; color:var(--secondary); margin-bottom:12px;">실시간 견적</h1>
-    <p style="font-size:1.1rem; color:var(--text-muted);">틴팅 마스터 VULUX 실시간 견적 페이지입니다.</p>
+    <p style="font-size:1.1rem; color:var(--text-muted);">TINTING PRO 실시간 견적 페이지입니다.</p>
 </div>
 
-<div class="container" style="max-width:1280px; margin:0 auto; padding:60px 24px;">
+<div class="container container-mobile-pad" style="max-width:1280px; margin:0 auto; padding:60px 24px;">
     <?php
     // Include specific sub-content
     if (file_exists(__DIR__ . '/content.html')) {

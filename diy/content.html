@@ -232,7 +232,7 @@ $offset = ($page - 1) * $limit;
 $db_products = sql_one('products', '*', "$where order by sort_order asc, no asc limit $offset, $limit");
 ?>
 
-<div style="display:flex; justify-content:center; gap:10px; margin-bottom:32px; flex-wrap:wrap;">
+<div class="mobile-tab-scroll" style="display:flex; justify-content:center; gap:10px; margin-bottom:32px; flex-wrap:wrap;">
     <a href="?cat=" class="cat-tab-btn <?php echo $cat_filter === '' ? 'active' : ''; ?>"><i
             class="fa-solid fa-boxes-stacked"></i> 전체 상품 보기</a>
     <?php foreach ($sub_categories as $sc): 
@@ -364,8 +364,8 @@ $db_products = sql_one('products', '*', "$where order by sort_order asc, no asc 
     </div>
 
     <!-- Video Grid / Container -->
-    <div class="video-grid-box"
-        style="background:#0F172A; border-radius:var(--radius-lg); padding:36px; color:white; box-shadow:0 20px 40px rgba(0,0,0,0.2); display:grid; grid-template-columns:1.2fr 0.8fr; gap:36px; align-items:center;">
+    <div class="video-grid-box mobile-grid-1col"
+        style="background:#0F172A; border-radius:var(--radius-lg); padding:36px 20px; color:white; box-shadow:0 20px 40px rgba(0,0,0,0.2); display:grid; grid-template-columns:1.2fr 0.8fr; gap:36px; align-items:center;">
         <div style="position:relative; border-radius:14px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.4); background:#1E293B; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;"
             id="diyVideoPlayerBox">
             <img src="../imgs/hero_balcony.png" alt="VULUX 시공 비디오 썸네일"
@@ -587,7 +587,7 @@ $db_products = sql_one('products', '*', "$where order by sort_order asc, no asc 
             총 결제 예상금액: <span id="orderTotalPrice">0</span>원
         </div>
 
-        <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+        <div class="form-row mobile-grid-1col" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
             <div>
                 <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:6px;">받으시는 분 <span
                         style="color:#EF4444;">*</span></label>
@@ -605,11 +605,11 @@ $db_products = sql_one('products', '*', "$where order by sort_order asc, no asc 
         <div style="margin-bottom:14px;">
             <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:6px;">배송지 주소 <span
                     style="color:#EF4444;">*</span></label>
-            <div style="display:flex; gap:8px; margin-bottom:8px;">
+            <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
                 <input type="text" id="orderZipcode" placeholder="우편번호" readonly
-                    style="width:140px; padding:12px; border:1px solid #CBD5E1; border-radius:var(--radius-md); background:#F1F5F9;">
+                    style="flex:1; min-width:110px; padding:12px; border:1px solid #CBD5E1; border-radius:var(--radius-md); background:#F1F5F9;">
                 <button type="button" onclick="execOrderPostcode()" class="btn btn-outline"
-                    style="padding:0 18px; font-size:0.9rem; font-weight:800; white-space:nowrap;">
+                    style="padding:12px 18px; font-size:0.9rem; font-weight:800; white-space:nowrap; flex-shrink:0;">
                     <i class="fa-solid fa-magnifying-glass"></i> 주소 검색
                 </button>
             </div>

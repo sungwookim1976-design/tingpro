@@ -1,9 +1,9 @@
-<div
+<div class="calc-card-box"
     style="background:linear-gradient(180deg, #F0F9FF 0%, #FFFFFF 100%); border:1px solid #BAE6FD; border-radius:var(--radius-lg); padding:40px; box-shadow:var(--shadow-md);">
     <h3 style="font-size:1.8rem; font-weight:900; margin-bottom:24px; color:var(--secondary);">온라인 간이 견적 계산기</h3>
 
     <?php if ($selected_product): ?>
-    <div
+    <div class="selected-prod-box"
         style="display:flex; gap:20px; align-items:center; background:#E0F7FA; border:1px solid var(--primary); border-radius:var(--radius-md); padding:20px; margin-bottom:32px;">
         <img src="../<?php echo htmlspecialchars($selected_product['thumb']); ?>"
             alt="<?php echo htmlspecialchars($selected_product['name']); ?>"
@@ -92,7 +92,7 @@ if (isset($conn) && $conn) {
                     oninput="updatePyVal(this.value)" onchange="updatePyVal(this.value)"
                     style="width:100%; height:8px; accent-color:#0077B6; cursor:pointer;">
                 <div
-                    style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--text-muted); font-weight:700;">
+                    style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px 8px; font-size:0.78rem; color:var(--text-muted); font-weight:700;">
                     <span onclick="setPyVal(10)" style="cursor:pointer;" title="10평 선택">10평</span>
                     <span onclick="setPyVal(25)" style="cursor:pointer; color:#0077B6; font-weight:800;"
                         title="25평 선택">25평</span>
@@ -109,18 +109,18 @@ if (isset($conn) && $conn) {
     </div>
 
     <div
-        style="background:linear-gradient(135deg, #0077B6 0%, #00B4D8 100%); color:white; border-radius:var(--radius-md); padding:32px; text-align:center;">
+        style="background:linear-gradient(135deg, #0077B6 0%, #00B4D8 100%); color:white; border-radius:var(--radius-md); padding:32px 20px; text-align:center;">
         <p style="font-size:1.1rem; opacity:0.9;">선택 옵션 기반 총 예상 시공 비용</p>
-        <div id="subPriceDisplay" style="font-size:3rem; font-weight:900; margin:12px 0;">1,120,000 원</div>
+        <div id="subPriceDisplay" class="mobile-price-display" style="font-size:3rem; font-weight:900; margin:12px 0; word-break:break-all;">1,120,000 원</div>
         <?php if (empty($_SESSION['s_mem_id'])): ?>
         <a href="../member/login.php?redirect=<?php echo urlencode('../calculator/index.php'); ?>"
-            class="btn btn-accent" style="padding:16px 36px; font-size:1.1rem; display:inline-flex;">
+            class="btn btn-accent mobile-btn-full" style="padding:16px 36px; font-size:1.05rem; display:inline-flex; max-width:100%; white-space:normal; text-align:center;">
             <i class="fa-solid fa-lock"></i> 로그인하고 무료 방문 실측 신청하기
         </a>
         <p style="font-size:0.8rem; opacity:0.85; margin-top:12px;">견적 신청은 회원만 가능합니다. 회원이 아니신가요? <a
                 href="../member/join.php" style="color:#fff; text-decoration:underline;">회원가입</a></p>
         <?php else: ?>
-        <button type="button" class="btn btn-accent" id="openReqFormBtn" style="padding:16px 36px; font-size:1.1rem;"
+        <button type="button" class="btn btn-accent mobile-btn-full" id="openReqFormBtn" style="padding:16px 36px; font-size:1.05rem;"
             onclick="toggleReqForm()">
             이 견적으로 무료 방문 실측 신청하기
         </button>
@@ -129,7 +129,7 @@ if (isset($conn) && $conn) {
 
     <?php if (!empty($_SESSION['s_mem_id'])): ?>
     <!-- 방문 실측 신청 폼 (인라인, 회원 전용) -->
-    <div id="quoteReqForm"
+    <div id="quoteReqForm" class="calc-card-box"
         style="display:none; margin-top:28px; padding:28px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:var(--radius-md);">
         <h4 style="font-size:1.2rem; font-weight:800; color:var(--secondary); margin-bottom:16px;">무료 방문 실측 신청</h4>
 
@@ -155,11 +155,11 @@ if (isset($conn) && $conn) {
         <div class="input-box" style="margin-bottom:14px;">
             <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:6px;">시공 주소 <span
                     style="color:#EF4444;">*</span></label>
-            <div style="display:flex; gap:8px; margin-bottom:8px;">
+            <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
                 <input type="text" id="reqZipcode" placeholder="우편번호" readonly
-                    style="width:140px; padding:12px; border:1px solid #CBD5E1; border-radius:var(--radius-md); background:#F1F5F9;">
+                    style="flex:1; min-width:110px; padding:12px; border:1px solid #CBD5E1; border-radius:var(--radius-md); background:#F1F5F9;">
                 <button type="button" onclick="execCalcPostcode()" class="btn btn-outline"
-                    style="padding:0 18px; font-size:0.9rem; font-weight:800; white-space:nowrap;">
+                    style="padding:12px 18px; font-size:0.9rem; font-weight:800; white-space:nowrap; flex-shrink:0;">
                     <i class="fa-solid fa-magnifying-glass"></i> 주소 검색
                 </button>
             </div>

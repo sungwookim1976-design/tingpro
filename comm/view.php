@@ -13,6 +13,7 @@ $board_style = [
     'news'    => ['badge_bg' => '#ECFDF5', 'badge_color' => '#059669', 'cat_name' => '뉴스',     'author' => '홍보팀'],
     'faq'     => ['badge_bg' => '#FFEDD5', 'badge_color' => '#EA580C', 'cat_name' => 'FAQ',      'author' => '고객지원팀'],
     'consult' => ['badge_bg' => '#E0F2FE', 'badge_color' => '#0284C7', 'cat_name' => '상담문의',  'author' => '고객상담팀'],
+    'selfvod' => ['badge_bg' => '#ECFDF5', 'badge_color' => '#059669', 'cat_name' => 'DIY 셀프시공', 'author' => '시공기술팀'],
 ];
 
 // "고객후기"는 관리자 게시판이 없어 기존 정적 데이터 유지
@@ -72,11 +73,11 @@ include_once __DIR__ . "/../inc/header.php";
     </div>
 </div>
 
-<div class="container" style="max-width:1000px; margin:0 auto; padding:60px 24px;">
+<div class="container container-mobile-pad" style="max-width:1000px; margin:0 auto; padding:60px 24px;">
 
     <div style="background:white; border:1px solid #E2E8F0; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-md);">
 
-        <div style="padding:36px 40px; border-bottom:1px solid #E2E8F0; background:#FAFDFE;">
+        <div class="comm-detail-header" style="padding:36px 40px; border-bottom:1px solid #E2E8F0; background:#FAFDFE;">
             <div style="display:inline-block; background:<?php echo $post['badge_bg']; ?>; color:<?php echo $post['badge_color']; ?>; font-size:0.82rem; font-weight:800; padding:6px 14px; border-radius:6px; margin-bottom:14px;">
                 <?php echo $post['cat_name']; ?>
             </div>
@@ -94,7 +95,7 @@ include_once __DIR__ . "/../inc/header.php";
             </div>
         </div>
 
-        <div style="padding:40px; color:#334155; font-size:1.1rem; line-height:1.8;">
+        <div class="comm-detail-content" style="padding:40px; color:#334155; font-size:1.1rem; line-height:1.8;">
             <?php if (!empty($post['img'])): ?>
                 <div style="text-align:center; margin-bottom:32px; background:#F8FAFC; padding:20px; border-radius:12px; border:1px solid #E2E8F0;">
                     <img src="<?php echo $post['img']; ?>" alt="게시글 이미지" style="max-width:100%; max-height:450px; border-radius:8px; box-shadow:0 8px 20px rgba(0,0,0,0.08);">

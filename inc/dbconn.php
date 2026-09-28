@@ -37,6 +37,7 @@ if (!$conn) {
 }
 
 mysqli_set_charset($conn, "utf8");
+@mysqli_query($conn, "ALTER TABLE members MODIFY COLUMN mem_type VARCHAR(20) NOT NULL DEFAULT 'customer'");
 
 function dbaccess($query) {
     global $conn;

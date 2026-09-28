@@ -6,13 +6,20 @@ if (empty($_SESSION['s_adm_id'])) {
     exit;
 }
 
-$no         = (int)((isset($_POST['no']) ? $_POST['no'] : 0));
-$board_type = trim((isset($_POST['board_type']) ? $_POST['board_type'] : ''));
-$badge      = trim((isset($_POST['badge']) ? $_POST['badge'] : ''));
-$title      = trim((isset($_POST['title']) ? $_POST['title'] : ''));
-$answer     = trim((isset($_POST['answer']) ? $_POST['answer'] : ''));
-$content    = (isset($_POST['content']) ? $_POST['content'] : '');
-$state      = isset($_POST['state']) && $_POST['state'] == '1' ? 1 : 0;
+$no          = (int)((isset($_POST['no']) ? $_POST['no'] : 0));
+$board_type  = trim((isset($_POST['board_type']) ? $_POST['board_type'] : ''));
+$badge       = trim((isset($_POST['badge']) ? $_POST['badge'] : ''));
+$title       = trim((isset($_POST['title']) ? $_POST['title'] : ''));
+$answer      = trim((isset($_POST['answer']) ? $_POST['answer'] : ''));
+$youtube_url = trim((isset($_POST['youtube_url']) ? $_POST['youtube_url'] : ''));
+$content     = (isset($_POST['content']) ? $_POST['content'] : '');
+$state       = isset($_POST['state']) && $_POST['state'] == '1' ? 1 : 0;
+
+// DB youtube_url 컬럼 미존재시 자동 추가
+$chk_col = @mysqli_query($conn, "SHOW COLUMNS FROM community_posts LIKE 'youtube_url'");
+if ($chk_col && mysqli_num_rows($chk_col) == 0) {
+    @mysqli_query($conn, "ALTER TABLE community_posts ADD COLUMN youtube_url VARCHAR(255) NULL");
+}
 
 // 유효한 게시판인지 확인 + 업로드 설정 조회
 $cfg = sql_one_one('board_config', '*', "and brd_id='" . mysqli_real_escape_string($conn, $board_type) . "'");
@@ -63,6 +70,7 @@ $fields = "board_type='" . mysqli_real_escape_string($conn, $board_type) . "', "
         . "badge='" . mysqli_real_escape_string($conn, $badge) . "', "
         . "title='" . mysqli_real_escape_string($conn, $title) . "', "
         . "answer='" . mysqli_real_escape_string($conn, $answer) . "', "
+        . "youtube_url='" . mysqli_real_escape_string($conn, $youtube_url) . "', "
         . "content='" . mysqli_real_escape_string($conn, $content) . "', "
         . "state=" . $state;
 

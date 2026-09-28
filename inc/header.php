@@ -43,14 +43,19 @@ if (isset($conn) && $conn) {
 <!-- Header Navigation (GNB Include) -->
 <header class="header">
     <div class="header-container">
-        <a href="<?php echo $base_path; ?>index.php" class="text-logo-brand">
-            <div class="text-logo-icon">
-                <i class="fa-solid fa-shield-halved"></i>
-            </div>
-            <div class="text-logo-content">
-                <div class="text-logo-main">TINTING PRO<span class="accent">.</span></div>
-                <div class="text-logo-sub">VULUX MASTER</div>
-            </div>
+        <a href="<?php echo $base_path; ?>index.php" class="nexfil-logo-link" title="TINTING PRO.">
+            <svg class="nexfil-logo-svg" viewBox="0 0 250 42" style="display:block; overflow:visible;">
+                <defs>
+                    <linearGradient id="nexfilSlashGradHeader" x1="0%" y1="100%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#DC2626" />
+                        <stop offset="35%" stop-color="#EA580C" />
+                        <stop offset="70%" stop-color="#F59E0B" />
+                        <stop offset="100%" stop-color="#FDE047" />
+                    </linearGradient>
+                </defs>
+                <text x="0" y="33" font-family="'Pretendard', 'Montserrat', 'Arial Black', sans-serif" font-weight="900" font-style="italic" font-size="33" fill="#C8102E" letter-spacing="-0.8">TINTING PRO<tspan fill="#C8102E">.</tspan></text>
+                <polygon points="112,41 124,41 168,0 156,0" fill="url(#nexfilSlashGradHeader)" />
+            </svg>
         </a>
 
         <ul class="gnb">
@@ -95,8 +100,10 @@ if (isset($conn) && $conn) {
                     역경매 마켓 <span class="gnb-badge new">NEW</span> <i class="fa-solid fa-chevron-down"></i>
                 </a>
                 <ul class="sub-menu">
-                    <li><a href="<?php echo $base_path; ?>process/index.php#apply">무료 역경매 신청</a></li>
-                    <li><a href="<?php echo $base_path; ?>process/index.php#live">진행중인 역경매 현황</a></li>
+                    <li><a href="<?php echo $base_path; ?>process/index.php"><i class="fa-solid fa-gavel" style="color:#D97706;"></i> 역경매 마켓 전체</a></li>
+                    <li><a href="<?php echo $base_path; ?>process/index.php#flow"><i class="fa-solid fa-timeline" style="color:#059669;"></i> 역경매 이용 흐름</a></li>
+                    <li><a href="<?php echo $base_path; ?>process/index.php#apply"><i class="fa-solid fa-pen-to-square" style="color:#D97706;"></i> 무료 역경매 신청</a></li>
+                    <li><a href="<?php echo $base_path; ?>process/index.php#live"><i class="fa-solid fa-list-check" style="color:#0077B6;"></i> 진행중인 역경매 현황</a></li>
                 </ul>
             </li>
             <li>
@@ -104,10 +111,12 @@ if (isset($conn) && $conn) {
                     커뮤니티 <i class="fa-solid fa-chevron-down"></i>
                 </a>
                 <ul class="sub-menu">
+                    <li><a href="<?php echo $base_path; ?>comm/index.php"><i class="fa-solid fa-list-ul" style="color:#0077B6;"></i> 커뮤니티 전체</a></li>
                     <li><a href="<?php echo $base_path; ?>comm/index.php?tab=notice"><i class="fa-solid fa-bullhorn" style="color:var(--primary-dark);"></i> 공지사항</a></li>
                     <li><a href="<?php echo $base_path; ?>comm/index.php?tab=news"><i class="fa-solid fa-newspaper" style="color:#D97706;"></i> 뉴스</a></li>
                     <li><a href="<?php echo $base_path; ?>comm/index.php?tab=faq"><i class="fa-solid fa-circle-question" style="color:#EA580C;"></i> FAQ</a></li>
                     <li><a href="<?php echo $base_path; ?>reviews/index.php"><i class="fa-solid fa-star" style="color:#F59E0B;"></i> 고객후기</a></li>
+                    <li><a href="<?php echo $base_path; ?>comm/selfvod.php"><i class="fa-solid fa-circle-play" style="color:#10B981;"></i> DIY 셀프 시공방법 영상</a></li>
                 </ul>
             </li>
         </ul>
@@ -135,65 +144,97 @@ if (isset($conn) && $conn) {
 <div class="mobile-drawer" id="mobileDrawer">
     <div>
         <div class="drawer-header">
-            <a href="<?php echo $base_path; ?>index.php" class="text-logo-brand" onclick="closeMobileDrawer()">
-                <div class="text-logo-icon" style="width: 32px; height: 32px; font-size: 0.95rem; border-radius: 8px;">
-                    <i class="fa-solid fa-shield-halved"></i>
-                </div>
-                <div class="text-logo-content">
-                    <div class="text-logo-main" style="font-size: 1.1rem;">TINTING PRO<span class="accent">.</span></div>
-                    <div class="text-logo-sub" style="font-size: 0.58rem;">VULUX MASTER</div>
-                </div>
+            <a href="<?php echo $base_path; ?>index.php" class="nexfil-logo-link" onclick="closeMobileDrawer()" title="TINTING PRO.">
+                <svg viewBox="0 0 250 42" height="32" style="display:block; overflow:visible;">
+                    <defs>
+                        <linearGradient id="nexfilSlashGradDrawer" x1="0%" y1="100%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#DC2626" />
+                            <stop offset="35%" stop-color="#EA580C" />
+                            <stop offset="70%" stop-color="#F59E0B" />
+                            <stop offset="100%" stop-color="#FDE047" />
+                        </linearGradient>
+                    </defs>
+                    <text x="0" y="33" font-family="'Pretendard', 'Montserrat', 'Arial Black', sans-serif" font-weight="900" font-style="italic" font-size="33" fill="#C8102E" letter-spacing="-0.8">TINTING PRO<tspan fill="#C8102E">.</tspan></text>
+                    <polygon points="112,41 124,41 168,0 156,0" fill="url(#nexfilSlashGradDrawer)" />
+                </svg>
             </a>
             <button class="drawer-close-btn" onclick="closeMobileDrawer()" aria-label="메뉴 닫기">&times;</button>
         </div>
         <ul class="drawer-gnb">
-            <li>
-                <a href="<?php echo $base_path; ?>about/index.php" onclick="closeMobileDrawer()">
+            <!-- 1. VULUX 대리점소개 -->
+            <li class="drawer-has-sub">
+                <div class="drawer-menu-item <?php echo ($current_page == 'about') ? 'active' : ''; ?>" onclick="toggleDrawerSub(this)">
                     <span><i class="fa-solid fa-building" style="color:var(--primary-dark); width:20px;"></i> VULUX 대리점소개</span>
-                    <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: #94A3B8;"></i>
-                </a>
-            </li>
-            <li>
-                <a href="<?php echo $base_path; ?>diy/index.php" onclick="closeMobileDrawer()">
-                    <span><i class="fa-solid fa-cart-shopping" style="color:#059669; width:20px;"></i> VULUX 견적구매 <span class="gnb-badge hot">HOT</span></span>
-                    <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: #94A3B8;"></i>
-                </a>
-            </li>
-            <li>
-                <a href="<?php echo $base_path; ?>calculator/index.php" onclick="closeMobileDrawer()">
-                    <span><i class="fa-solid fa-calculator" style="color:#0077B6; width:20px;"></i> 실시간 견적계산기</span>
-                    <span class="gnb-badge hot">HOT</span>
-                </a>
-            </li>
-            <li>
-                <a href="<?php echo $base_path; ?>gallery/index.php" onclick="closeMobileDrawer()">
-                    <span><i class="fa-solid fa-border-all" style="color:var(--primary-dark); width:20px;"></i> 시공사례</span>
-                    <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: #94A3B8;"></i>
-                </a>
-            </li>
-            <li>
-                <a href="<?php echo $base_path; ?>process/index.php#apply" onclick="closeMobileDrawer()">
-                    <span><i class="fa-solid fa-gavel" style="color:#D97706; width:20px;"></i> 역경매 마켓</span>
-                    <span class="gnb-badge new">NEW</span>
-                </a>
-            </li>
-            <li>
-                <a href="<?php echo $base_path; ?>comm/index.php" onclick="closeMobileDrawer()">
-                    <span><i class="fa-solid fa-comments" style="color:#EA580C; width:20px;"></i> 커뮤니티</span>
-                    <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: #94A3B8;"></i>
-                </a>
-                <div style="padding-left:24px; margin-top:6px; display:flex; flex-direction:column; gap:8px;">
-                    <a href="<?php echo $base_path; ?>comm/index.php?tab=notice" onclick="closeMobileDrawer()" style="font-size:0.88rem; color:#475569;">▪ 공지사항</a>
-                    <a href="<?php echo $base_path; ?>comm/index.php?tab=news" onclick="closeMobileDrawer()" style="font-size:0.88rem; color:#475569;">▪ 뉴스</a>
-                    <a href="<?php echo $base_path; ?>comm/index.php?tab=faq" onclick="closeMobileDrawer()" style="font-size:0.88rem; color:#475569;">▪ FAQ</a>
-                    <a href="<?php echo $base_path; ?>reviews/index.php" onclick="closeMobileDrawer()" style="font-size:0.88rem; color:#475569;">▪ 고객후기</a>
+                    <i class="fa-solid fa-chevron-down drawer-arrow" style="<?php echo ($current_page == 'about') ? 'transform:rotate(180deg);' : ''; ?>"></i>
                 </div>
+                <ul class="drawer-sub-menu" style="display:<?php echo ($current_page == 'about') ? 'block' : 'none'; ?>;">
+                    <li><a href="<?php echo $base_path; ?>about/index.php" onclick="closeMobileDrawer()"><i class="fa-solid fa-building" style="color:var(--primary-dark);"></i> 대리점 소개</a></li>
+                    <li><a href="<?php echo $base_path; ?>master/index.php" onclick="closeMobileDrawer()"><i class="fa-solid fa-award" style="color:#D97706;"></i> 마스터 인증</a></li>
+                    <li><a href="<?php echo $base_path; ?>about/location.php" onclick="closeMobileDrawer()"><i class="fa-solid fa-location-dot" style="color:#059669;"></i> 오시는 길</a></li>
+                </ul>
             </li>
-            <li>
-                <a href="<?php echo $base_path; ?>about/location.php" onclick="closeMobileDrawer()">
-                    <span><i class="fa-solid fa-location-dot" style="color:#059669; width:20px;"></i> 오시는 길</span>
-                    <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: #94A3B8;"></i>
-                </a>
+
+            <!-- 2. VULUX 견적구매 -->
+            <li class="drawer-has-sub">
+                <div class="drawer-menu-item <?php echo ($current_page == 'diy' || $current_page == 'services' || $current_page == 'calculator') ? 'active' : ''; ?>" onclick="toggleDrawerSub(this)">
+                    <span><i class="fa-solid fa-cart-shopping" style="color:#059669; width:20px;"></i> VULUX 견적구매 <span class="gnb-badge hot">HOT</span></span>
+                    <i class="fa-solid fa-chevron-down drawer-arrow" style="<?php echo ($current_page == 'diy' || $current_page == 'services' || $current_page == 'calculator') ? 'transform:rotate(180deg);' : ''; ?>"></i>
+                </div>
+                <ul class="drawer-sub-menu" style="display:<?php echo ($current_page == 'diy' || $current_page == 'services' || $current_page == 'calculator') ? 'block' : 'none'; ?>;">
+                    <li><a href="<?php echo $base_path; ?>diy/index.php" onclick="closeMobileDrawer()"><i class="fa-solid fa-cart-shopping" style="color:#059669;"></i> 상품견적구매</a></li>
+                    <li><a href="<?php echo $base_path; ?>calculator/index.php" onclick="closeMobileDrawer()"><i class="fa-solid fa-calculator" style="color:#0077B6;"></i> 실시간 견적계산기</a></li>
+                </ul>
+            </li>
+
+            <!-- 3. 시공사례 -->
+            <li class="drawer-has-sub">
+                <div class="drawer-menu-item <?php echo ($current_page == 'gallery') ? 'active' : ''; ?>" onclick="toggleDrawerSub(this)">
+                    <span><i class="fa-solid fa-border-all" style="color:var(--primary-dark); width:20px;"></i> 시공사례</span>
+                    <i class="fa-solid fa-chevron-down drawer-arrow" style="<?php echo ($current_page == 'gallery') ? 'transform:rotate(180deg);' : ''; ?>"></i>
+                </div>
+                <ul class="drawer-sub-menu" style="display:<?php echo ($current_page == 'gallery') ? 'block' : 'none'; ?>;">
+                    <li><a href="<?php echo $base_path; ?>gallery/index.php" onclick="closeMobileDrawer()"><i class="fa-solid fa-border-all" style="color:var(--primary-dark);"></i> 전체 시공사례</a></li>
+                    <?php if (!empty($gnb_mid_cats)): ?>
+                        <?php foreach ($gnb_mid_cats as $gmc): ?>
+                            <li><a href="<?php echo $base_path; ?>gallery/index.php?cat=<?php echo urlencode($gmc['cat_name']); ?>" onclick="closeMobileDrawer()"><i class="fa-solid fa-chevron-right" style="font-size:0.75rem; color:#94A3B8;"></i> <?php echo htmlspecialchars($gmc['cat_name']); ?></a></li>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <li><a href="<?php echo $base_path; ?>gallery/index.php?cat=아파트/주택베란다" onclick="closeMobileDrawer()">아파트/주택베란다</a></li>
+                        <li><a href="<?php echo $base_path; ?>gallery/index.php?cat=빌딩" onclick="closeMobileDrawer()">빌딩</a></li>
+                        <li><a href="<?php echo $base_path; ?>gallery/index.php?cat=자동차" onclick="closeMobileDrawer()">자동차</a></li>
+                        <li><a href="<?php echo $base_path; ?>gallery/index.php?cat=DIY자가설치" onclick="closeMobileDrawer()">DIY자가설치</a></li>
+                    <?php endif; ?>
+                </ul>
+            </li>
+
+            <!-- 4. 역경매 마켓 -->
+            <li class="drawer-has-sub">
+                <div class="drawer-menu-item <?php echo ($current_page == 'process') ? 'active' : ''; ?>" onclick="toggleDrawerSub(this)">
+                    <span><i class="fa-solid fa-gavel" style="color:#D97706; width:20px;"></i> 역경매 마켓 <span class="gnb-badge new">NEW</span></span>
+                    <i class="fa-solid fa-chevron-down drawer-arrow" style="<?php echo ($current_page == 'process') ? 'transform:rotate(180deg);' : ''; ?>"></i>
+                </div>
+                <ul class="drawer-sub-menu" style="display:<?php echo ($current_page == 'process') ? 'block' : 'none'; ?>;">
+                    <li><a href="<?php echo $base_path; ?>process/index.php" onclick="closeMobileDrawer()"><i class="fa-solid fa-gavel" style="color:#D97706;"></i> 역경매 마켓 전체</a></li>
+                    <li><a href="<?php echo $base_path; ?>process/index.php#flow" onclick="closeMobileDrawer()"><i class="fa-solid fa-timeline" style="color:#059669;"></i> 역경매 이용 흐름</a></li>
+                    <li><a href="<?php echo $base_path; ?>process/index.php#apply" onclick="closeMobileDrawer()"><i class="fa-solid fa-pen-to-square" style="color:#D97706;"></i> 무료 역경매 신청</a></li>
+                    <li><a href="<?php echo $base_path; ?>process/index.php#live" onclick="closeMobileDrawer()"><i class="fa-solid fa-list-check" style="color:#0077B6;"></i> 진행중인 역경매 현황</a></li>
+                </ul>
+            </li>
+
+            <!-- 5. 커뮤니티 -->
+            <li class="drawer-has-sub">
+                <div class="drawer-menu-item <?php echo ($current_page == 'community' || $current_page == 'reviews') ? 'active' : ''; ?>" onclick="toggleDrawerSub(this)">
+                    <span><i class="fa-solid fa-comments" style="color:#EA580C; width:20px;"></i> 커뮤니티</span>
+                    <i class="fa-solid fa-chevron-down drawer-arrow" style="<?php echo ($current_page == 'community' || $current_page == 'reviews') ? 'transform:rotate(180deg);' : ''; ?>"></i>
+                </div>
+                <ul class="drawer-sub-menu" style="display:<?php echo ($current_page == 'community' || $current_page == 'reviews') ? 'block' : 'none'; ?>;">
+                    <li><a href="<?php echo $base_path; ?>comm/index.php" onclick="closeMobileDrawer()"><i class="fa-solid fa-list-ul" style="color:#0077B6;"></i> 커뮤니티 전체</a></li>
+                    <li><a href="<?php echo $base_path; ?>comm/index.php?tab=notice" onclick="closeMobileDrawer()"><i class="fa-solid fa-bullhorn" style="color:var(--primary-dark);"></i> 공지사항</a></li>
+                    <li><a href="<?php echo $base_path; ?>comm/index.php?tab=news" onclick="closeMobileDrawer()"><i class="fa-solid fa-newspaper" style="color:#D97706;"></i> 뉴스</a></li>
+                    <li><a href="<?php echo $base_path; ?>comm/index.php?tab=faq" onclick="closeMobileDrawer()"><i class="fa-solid fa-circle-question" style="color:#EA580C;"></i> FAQ</a></li>
+                    <li><a href="<?php echo $base_path; ?>reviews/index.php" onclick="closeMobileDrawer()"><i class="fa-solid fa-star" style="color:#F59E0B;"></i> 고객후기</a></li>
+                    <li><a href="<?php echo $base_path; ?>comm/selfvod.php" onclick="closeMobileDrawer()"><i class="fa-solid fa-circle-play" style="color:#10B981;"></i> DIY 셀프 시공방법 영상</a></li>
+                </ul>
             </li>
         </ul>
     </div>

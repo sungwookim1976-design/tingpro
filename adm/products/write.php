@@ -6,6 +6,37 @@ include_once __DIR__ . "/../../inc/dbconn.php";
 include_once __DIR__ . "/../inc/auth_check.php";
 
 @mysqli_query($conn, "ALTER TABLE `products` MODIFY COLUMN `category` VARCHAR(100) NOT NULL DEFAULT ''");
+@mysqli_query($conn, "ALTER TABLE `products` ADD COLUMN `brand` VARCHAR(100) NOT NULL DEFAULT 'VULUX'");
+
+// tb_code 테이블 자동 생성 및 브랜드 그룹 데이터 시딩 (설정 >> 코드관리 >> 브랜드)
+@mysqli_query($conn, "
+    CREATE TABLE IF NOT EXISTS `tb_code` (
+      `idx`        INT          NOT NULL AUTO_INCREMENT,
+      `group_sort` INT          NOT NULL DEFAULT 1,
+      `group_name` VARCHAR(100) NOT NULL,
+      `code_sort`  INT          NOT NULL DEFAULT 1,
+      `code_name`  VARCHAR(100) NOT NULL,
+      `code_value` VARCHAR(100) NOT NULL,
+      `reg_date`   DATETIME     NOT NULL DEFAULT NOW(),
+      PRIMARY KEY (`idx`),
+      KEY `idx_group` (`group_sort`, `group_name`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+");
+
+$chk_brand_cnt = sql_cnt('tb_code', "and group_name='브랜드'");
+if ($chk_brand_cnt == 0) {
+    mysqli_query($conn, "INSERT INTO tb_code (group_sort, group_name, code_sort, code_name, code_value, reg_date) VALUES
+    (1, '브랜드', 1, 'VULUX (벌럭스)', 'VULUX', NOW()),
+    (1, '브랜드', 2, 'NEXFIL (넥스필)', 'NEXFIL', NOW()),
+    (1, '브랜드', 3, '3M (쓰리엠)', '3M', NOW()),
+    (1, '브랜드', 4, 'LLumar (루마)', 'LLumar', NOW()),
+    (1, '브랜드', 5, 'Solar Gard (솔라가드)', 'Solar Gard', NOW()),
+    (1, '브랜드', 6, 'Rayno (레이노)', 'Rayno', NOW()),
+    (1, '브랜드', 7, 'KUBE (큐브)', 'KUBE', NOW()),
+    (1, '브랜드', 8, '기타 브랜드', 'ETC', NOW())");
+}
+
+$db_brand_codes = sql_one('tb_code', '*', "and group_name='브랜드' order by code_sort asc, idx asc");
 
 $no = isset($_GET['no']) ? (int)$_GET['no'] : 0;
 $row = null;
@@ -65,26 +96,51 @@ include_once __DIR__ . "/../inc/adm_head.php";
         <input type="hidden" name="mode" value="<?php echo $no ? 'update' : 'insert'; ?>">
         <input type="hidden" name="no" value="<?php echo $no; ?>">
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-            <div class="adm-form-row">
-                <label for="category">상품 구분 <span style="color:#EF4444;">*</span></label>
-                <select id="category" name="category" required>
-                    <?php foreach ($write_categories as $wc): 
-                        $val = (string)$wc['cat_name'];
-                        $idx_val = (string)$wc['idx'];
-                        $is_sel = ($row && ($row['category'] === $val || $row['category'] === $idx_val || (isset($wc['cat_name']) && $row['category'] === $wc['cat_name'])));
-                        $label_text = !empty($wc['parent_name']) ? '[' . $wc['parent_name'] . '] ' . $wc['cat_name'] : $wc['cat_name'];
-                    ?>
-                        <option value="<?php echo htmlspecialchars($val); ?>" <?php echo $is_sel ? 'selected' : ''; ?>><?php echo htmlspecialchars($label_text); ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="adm-form-row">
-                <label for="state">판매 상태</label>
-                <select id="state" name="state">
-                    <option value="1" <?php echo (!$row || $row['state'] == 1) ? 'selected' : ''; ?>>판매중 (공개)</option>
-                    <option value="0" <?php echo ($row && $row['state'] == 0) ? 'selected' : ''; ?>>숨김 (비공개)</option>
-                </select>
+        <div style="background:#F8FAFC; padding:18px; border-radius:12px; border:1px solid var(--adm-border); margin-bottom:20px;">
+            <h4 style="font-size:0.92rem; font-weight:800; color:var(--adm-primary); margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-code-branch"></i> 코드 관리 (상품 구분 &amp; 브랜드 지정)
+            </h4>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+                <div class="adm-form-row" style="margin-bottom:0;">
+                    <label for="category">상품 구분 <span style="color:#EF4444;">*</span></label>
+                    <select id="category" name="category" required>
+                        <?php foreach ($write_categories as $wc): 
+                            $val = (string)$wc['cat_name'];
+                            $idx_val = (string)$wc['idx'];
+                            $is_sel = ($row && ($row['category'] === $val || $row['category'] === $idx_val || (isset($wc['cat_name']) && $row['category'] === $wc['cat_name'])));
+                            $label_text = !empty($wc['parent_name']) ? '[' . $wc['parent_name'] . '] ' . $wc['cat_name'] : $wc['cat_name'];
+                        ?>
+                            <option value="<?php echo htmlspecialchars($val); ?>" <?php echo $is_sel ? 'selected' : ''; ?>><?php echo htmlspecialchars($label_text); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="adm-form-row" style="margin-bottom:0;">
+                    <label for="brand">브랜드 선택 <span style="color:#EF4444;">*</span></label>
+                    <select id="brand" name="brand">
+                        <?php
+                        $curr_brand = ($row && isset($row['brand']) && $row['brand'] !== '') ? $row['brand'] : 'VULUX (벌럭스)';
+                        if (!empty($db_brand_codes)):
+                            foreach ($db_brand_codes as $bc):
+                                $b_name = $bc['code_name'];
+                                $b_val  = $bc['code_value'];
+                                $is_sel = ($curr_brand === $b_name || $curr_brand === $b_val);
+                        ?>
+                            <option value="<?php echo htmlspecialchars($b_name); ?>" <?php echo $is_sel ? 'selected' : ''; ?>><?php echo htmlspecialchars($b_name); ?></option>
+                        <?php
+                            endforeach;
+                        else:
+                        ?>
+                            <option value="VULUX (벌럭스)" selected>VULUX (벌럭스)</option>
+                        <?php endif; ?>
+                    </select>
+                </div>
+                <div class="adm-form-row" style="margin-bottom:0;">
+                    <label for="state">판매 상태</label>
+                    <select id="state" name="state">
+                        <option value="1" <?php echo (!$row || $row['state'] == 1) ? 'selected' : ''; ?>>판매중 (공개)</option>
+                        <option value="0" <?php echo ($row && $row['state'] == 0) ? 'selected' : ''; ?>>숨김 (비공개)</option>
+                    </select>
+                </div>
             </div>
         </div>
 

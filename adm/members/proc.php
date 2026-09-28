@@ -17,7 +17,7 @@ function respond_alert($msg, $url = '') {
 $mode = (isset($_POST['mode']) ? $_POST['mode'] : (isset($_GET['mode']) ? $_GET['mode'] : ''));
 
 if ($mode === 'insert') {
-    $mem_type = in_array((isset($_POST['mem_type']) ? $_POST['mem_type'] : ''), ['customer', 'freelance', 'partner']) ? $_POST['mem_type'] : 'customer';
+    $mem_type = in_array((isset($_POST['mem_type']) ? $_POST['mem_type'] : ''), ['customer', 'freelance', 'corporate', 'partner']) ? $_POST['mem_type'] : 'customer';
     $email    = trim((isset($_POST['email']) && $_POST['email'] !== '' ? $_POST['email'] : (isset($_POST['uid']) ? $_POST['uid'] : '')));
     $passwd   = (isset($_POST['passwd']) ? $_POST['passwd'] : '');
     $name     = trim((isset($_POST['name']) ? $_POST['name'] : ''));
@@ -77,7 +77,7 @@ if ($mode === 'insert') {
 }
 elseif ($mode === 'update') {
     $no       = intval((isset($_POST['no']) ? $_POST['no'] : 0));
-    $mem_type = in_array((isset($_POST['mem_type']) ? $_POST['mem_type'] : ''), ['customer', 'freelance', 'partner']) ? $_POST['mem_type'] : 'customer';
+    $mem_type = in_array((isset($_POST['mem_type']) ? $_POST['mem_type'] : ''), ['customer', 'freelance', 'corporate', 'partner']) ? $_POST['mem_type'] : 'customer';
     $email    = trim((isset($_POST['email']) ? $_POST['email'] : ''));
     $name     = trim((isset($_POST['name']) ? $_POST['name'] : ''));
     $hphone   = trim((isset($_POST['hphone']) ? $_POST['hphone'] : ''));
@@ -236,6 +236,47 @@ elseif ($mode === 'delete_bulk') {
         respond_alert("선택한 " . $deleted_cnt . "명의 회원이 삭제되었습니다.", "index.php");
     } else {
         respond_alert("회원 삭제 처리에 실패하였습니다.");
+    }
+}
+elseif ($mode === 'change_type_bulk') {
+    $chk_no = (isset($_POST['chk_no']) ? $_POST['chk_no'] : []);
+    $target_type = (isset($_POST['target_type']) ? $_POST['target_type'] : '');
+
+    $allowed_types = ['customer', 'freelance', 'corporate', 'partner'];
+    if (!in_array($target_type, $allowed_types)) {
+        respond_alert("올바른 회원 유형을 선택해 주세요.");
+    }
+    if (empty($chk_no) || !is_array($chk_no)) {
+        respond_alert("유형을 변경할 회원을 선택해 주세요.");
+    }
+
+    $valid_nos = [];
+    foreach ($chk_no as $no) {
+        $n = intval($no);
+        if ($n > 0) {
+            $valid_nos[] = $n;
+        }
+    }
+
+    if (empty($valid_nos)) {
+        respond_alert("선택된 회원이 유효하지 않습니다.");
+    }
+
+    $no_str = implode(',', $valid_nos);
+    $ret = sql_up('members', "mem_type='" . mysqli_real_escape_string($conn, $target_type) . "'", "and no IN (" . $no_str . ")");
+
+    $type_names = [
+        'customer' => '수요고객',
+        'freelance' => '프리랜서',
+        'corporate' => '기업',
+        'partner' => '대리점'
+    ];
+    $target_label = isset($type_names[$target_type]) ? $type_names[$target_type] : $target_type;
+
+    if ($ret) {
+        respond_alert("선택한 " . count($valid_nos) . "명의 회원 유형이 [" . $target_label . "](으)로 일괄 변경되었습니다.", "index.php");
+    } else {
+        respond_alert("회원 유형 일괄 변경 처리에 실패하였습니다.");
     }
 }
 else {

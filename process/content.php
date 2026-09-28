@@ -22,7 +22,23 @@
     .cat-tab-btn.active { background:var(--primary-dark); color:#fff; border-color:var(--primary-dark); box-shadow:0 4px 12px rgba(0,119,182,0.25); }
 
     @media (max-width:900px) { .auc-grid { grid-template-columns:repeat(2, 1fr); } }
-    @media (max-width:600px) { .auc-grid { grid-template-columns:1fr; } }
+    @media (max-width:600px) { 
+        .auc-grid { grid-template-columns:1fr; }
+        .auc-form-card { padding:20px 16px !important; margin-bottom:32px !important; }
+        .auc-filter {
+            display:flex !important;
+            overflow-x:auto !important;
+            -webkit-overflow-scrolling:touch;
+            justify-content:flex-start !important;
+            gap:8px !important;
+            padding-bottom:8px !important;
+            scrollbar-width:none;
+        }
+        .auc-filter::-webkit-scrollbar { display:none; }
+        .auc-filter a { flex-shrink:0; white-space:nowrap; padding:8px 14px !important; font-size:0.82rem !important; }
+        .auc-card-head { padding:14px 16px !important; }
+        .auc-card-body { padding:16px 14px !important; }
+    }
 </style>
 
 <?php
@@ -93,7 +109,7 @@ $detail_no = isset($_GET['no']) ? (int)$_GET['no'] : 0;
             <span style="font-size:0.8rem; color:#B45309;"><i class="fa-solid fa-rotate"></i> 입찰 마감 기한은 1일 기본 적용되며 입찰자가 없을 경우 1일 단위로 자동 연장됩니다.</span>
         </div>
 
-        <div style="padding:32px; display:grid; grid-template-columns:1fr 1fr; gap:32px;">
+        <div class="mobile-grid-1col" style="padding:32px; display:grid; grid-template-columns:1fr 1fr; gap:32px;">
             <div>
                 <h3 style="font-size:1.2rem; font-weight:800; color:var(--secondary); margin-bottom:16px; border-bottom:2px solid #F1F5F9; padding-bottom:8px;">
                     <i class="fa-solid fa-clipboard-list" style="color:var(--primary);"></i> 시공 신청 요약
@@ -206,7 +222,7 @@ if ($is_logged_in) {
                                 <span style="font-size:0.75rem; color:#0284C7; font-weight:600; margin-left:6px;">(회원 계정 구분으로 자동 고정)</span>
                             <?php endif; ?>
                         </label>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                        <div class="mobile-grid-1col" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                             <?php
                             $type_options = array(
                                 '수요고객'           => '수요고객',
@@ -266,29 +282,37 @@ endif;
 <!-- ------------------------------------------------------------- -->
 <h2 style="font-size:2rem; font-weight:900; text-align:center; margin-bottom:36px; color:var(--secondary);" id="flow">역경매 마켓 이용 흐름</h2>
 
-<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-bottom:60px;">
-    <div style="background:#F0F9FF; border:1px solid #BAE6FD; padding:32px 20px; border-radius:var(--radius-md); text-align:center;">
-        <div style="width:40px; height:40px; background:var(--accent); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; margin:0 auto 16px auto;">1</div>
-        <h4 style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">시공 요청 등록</h4>
-        <p style="font-size:0.85rem; color:var(--text-muted);">주소, 평수, 희망 일정을 1분만에 등록합니다.</p>
+<div class="mobile-grid-1col" style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-bottom:60px;">
+    <div style="background:#F0F9FF; border:1px solid #BAE6FD; padding:28px 20px; border-radius:var(--radius-md); text-align:center;">
+        <div style="width:42px; height:42px; background:var(--accent); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1.1rem; margin:0 auto 16px auto; box-shadow:0 4px 10px rgba(255,107,53,0.3);">1</div>
+        <h4 style="font-size:1.1rem; font-weight:800; margin-bottom:8px; color:#0F172A;">
+            <i class="fa-solid fa-pen-to-square" style="color:var(--primary-dark); margin-right:4px;"></i> 시공 요청 등록
+        </h4>
+        <p style="font-size:0.88rem; color:var(--text-muted); margin:0;">주소, 평수, 희망 일정을 1분만에 등록합니다.</p>
     </div>
 
-    <div style="background:#F0F9FF; border:1px solid #BAE6FD; padding:32px 20px; border-radius:var(--radius-md); text-align:center;">
-        <div style="width:40px; height:40px; background:var(--accent); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; margin:0 auto 16px auto;">2</div>
-        <h4 style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">틴팅프로 역경매 입찰</h4>
-        <p style="font-size:0.85rem; color:var(--text-muted);">전국 검증 틴팅프로들이 공임 견적을 제안합니다.</p>
+    <div style="background:#F0F9FF; border:1px solid #BAE6FD; padding:28px 20px; border-radius:var(--radius-md); text-align:center;">
+        <div style="width:42px; height:42px; background:var(--accent); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1.1rem; margin:0 auto 16px auto; box-shadow:0 4px 10px rgba(255,107,53,0.3);">2</div>
+        <h4 style="font-size:1.1rem; font-weight:800; margin-bottom:8px; color:#0F172A;">
+            <i class="fa-solid fa-gavel" style="color:#D97706; margin-right:4px;"></i> 틴팅프로 역경매 입찰
+        </h4>
+        <p style="font-size:0.88rem; color:var(--text-muted); margin:0;">전국 검증 틴팅프로들이 공임 견적을 제안합니다.</p>
     </div>
 
-    <div style="background:#F0F9FF; border:1px solid #BAE6FD; padding:32px 20px; border-radius:var(--radius-md); text-align:center;">
-        <div style="width:40px; height:40px; background:var(--accent); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; margin:0 auto 16px auto;">3</div>
-        <h4 style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">틴팅프로 선택 & 계약</h4>
-        <p style="font-size:0.85rem; color:var(--text-muted);">평점과 입찰가를 비교하여 확정합니다.</p>
+    <div style="background:#F0F9FF; border:1px solid #BAE6FD; padding:28px 20px; border-radius:var(--radius-md); text-align:center;">
+        <div style="width:42px; height:42px; background:var(--accent); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1.1rem; margin:0 auto 16px auto; box-shadow:0 4px 10px rgba(255,107,53,0.3);">3</div>
+        <h4 style="font-size:1.1rem; font-weight:800; margin-bottom:8px; color:#0F172A;">
+            <i class="fa-solid fa-handshake-angle" style="color:#059669; margin-right:4px;"></i> 틴팅프로 선택 &amp; 계약
+        </h4>
+        <p style="font-size:0.88rem; color:var(--text-muted); margin:0;">평점과 입찰가를 비교하여 확정합니다.</p>
     </div>
 
-    <div style="background:#F0F9FF; border:1px solid #BAE6FD; padding:32px 20px; border-radius:var(--radius-md); text-align:center;">
-        <div style="width:40px; height:40px; background:var(--accent); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; margin:0 auto 16px auto;">4</div>
-        <h4 style="font-size:1.1rem; font-weight:800; margin-bottom:8px;">시공 & 10년 보증</h4>
-        <p style="font-size:0.85rem; color:var(--text-muted);">완벽 시공 후 모바일 정품 보증서 발급</p>
+    <div style="background:#F0F9FF; border:1.5px solid #BAE6FD; padding:28px 20px; border-radius:var(--radius-md); text-align:center;">
+        <div style="width:42px; height:42px; background:var(--accent); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1.1rem; margin:0 auto 16px auto; box-shadow:0 4px 10px rgba(255,107,53,0.3);">4</div>
+        <h4 style="font-size:1.1rem; font-weight:800; margin-bottom:8px; color:#0F172A;">
+            <i class="fa-solid fa-certificate" style="color:#0077B6; margin-right:4px;"></i> 시공 &amp; 10년 보증
+        </h4>
+        <p style="font-size:0.88rem; color:var(--text-muted); margin:0;">완벽 시공 후 모바일 정품 보증서 발급</p>
     </div>
 </div>
 
@@ -378,6 +402,65 @@ if ($res_sub && mysqli_num_rows($res_sub) > 0) {
     }
 }
 
+// -------------------------------------------------------------
+// 역경매 DB 주소 기반 시/도 (1차) > 시/군/구 (2차) 그룹핑 및 표준 맵 병합
+// -------------------------------------------------------------
+$default_location_map = [
+    '서울특별시' => ['강남구','강동구','강북구','강서구','관악구','광진구','구로구','금천구','노원구','도봉구','동대문구','동작구','마포구','서대문구','서초구','성동구','성북구','송파구','양천구','영등포구','용산구','은평구','종로구','중구','중랑구'],
+    '경기도'     => ['수원시','성남시','고양시','용인시','부천시','안산시','남양주시','안양시','화성시','평택시','의정부시','파주시','시흥시','김포시','광명시','광주시','군포시','이천시','오산시','하남시','양주시','구리시','안성시','포천시','의왕시','여주시','양평군','동두천시','가평군','과천시','연천군'],
+    '인천광역시' => ['중구','동구','미추홀구','연수구','남동구','부평구','계양구','서구','강화군','옹진군'],
+    '부산광역시' => ['중구','서구','동구','영도구','부산진구','동래구','남구','북구','해운대구','사하구','금정구','강서구','연제구','수영구','사상구','기장군'],
+    '대구광역시' => ['중구','동구','서구','남구','북구','수성구','달서구','달성군','군위군'],
+    '광주광역시' => ['동구','서구','남구','북구','광산구'],
+    '대전광역시' => ['동구','중구','서구','유성구','대덕구'],
+    '울산광역시' => ['중구','남구','동구','북구','울주군'],
+    '세종특별자치시' => ['세종시'],
+    '강원특별자치도' => ['춘천시','원주시','강릉시','동해시','태백시','속초시','삼척시','홍천군','횡성군','영월군','평창군','정선군','철원군','화천군','양구군','인제군','고성군','양양군'],
+    '충청북도'   => ['청주시','충주시','제천시','보은군','옥천군','영동군','증평군','진천군','괴산군','음성군','단양군'],
+    '충청남도'   => ['천안시','공주시','보령시','아산시','서산시','논산시','계룡시','당진시','금산군','부여군','서천군','청양군','홍성군','예산군','태안군'],
+    '전라북도'   => ['전주시','군산시','익산시','정읍시','남원시','김제시','완주군','진안군','무주군','장수군','임실군','순창군','고창군','부안군'],
+    '전라남도'   => ['목포시','여수시','순천시','나주시','광양시','담양군','곡성군','구례군','고흥군','보성군','화순군','장흥군','강진군','해남군','영암군','무안군','함평군','영광군','장성군','완도군','진도군','신안군'],
+    '경상북도'   => ['포항시','경주시','김천시','안동시','구미시','영주시','영천시','상주시','문경시','경산시','군위군','의성군','청송군','영양군','영덕군','청도군','고령군','성주군','칠곡군','예천군','봉화군','울진군','울릉군'],
+    '경상남도'   => ['창원시','진주시','통영시','사천시','김해시','밀양시','거제시','양산시','의령군','함안군','창녕군','고성군','남해군','하동군','산청군','함양군','거창군','합천군'],
+    '제주특별자치도' => ['제주시','서귀포시']
+];
+
+// DB auctions 테이블에서 주소 group 파싱
+$db_location_map = [];
+$res_addr = @mysqli_query($conn, "SELECT addr FROM auctions WHERE addr IS NOT NULL AND addr != ''");
+if ($res_addr && mysqli_num_rows($res_addr) > 0) {
+    while ($r_addr = mysqli_fetch_assoc($res_addr)) {
+        $parts = preg_split('/\s+/', trim($r_addr['addr']));
+        if (count($parts) >= 1 && !empty($parts[0])) {
+            $s_name = $parts[0];
+            $g_name = isset($parts[1]) ? $parts[1] : '';
+            if (!isset($db_location_map[$s_name])) {
+                $db_location_map[$s_name] = [];
+            }
+            if ($g_name !== '' && !in_array($g_name, $db_location_map[$s_name])) {
+                $db_location_map[$s_name][] = $g_name;
+            }
+        }
+    }
+}
+
+// 기본 행정구역과 DB 주소 그룹 병합
+$location_map = $default_location_map;
+foreach ($db_location_map as $ds => $d_guguns) {
+    if (!isset($location_map[$ds])) {
+        $location_map[$ds] = $d_guguns;
+    } else {
+        foreach ($d_guguns as $dg) {
+            if (!in_array($dg, $location_map[$ds])) {
+                $location_map[$ds][] = $dg;
+            }
+        }
+    }
+}
+
+$selected_sido  = isset($_GET['sido']) ? trim($_GET['sido']) : '';
+$selected_gugun = isset($_GET['gugun']) ? trim($_GET['gugun']) : '';
+
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $limit = 6;
 
@@ -385,6 +468,12 @@ $where = "and (state='입찰대기' or state='입찰중' or state='매칭완료'
 if ($cat !== '') {
     $target_space = isset($cat_map[$cat]) ? $cat_map[$cat] : $cat;
     $where .= " and (space_type='" . mysqli_real_escape_string($conn, $target_space) . "' or space_type LIKE '%" . mysqli_real_escape_string($conn, $target_space) . "%')";
+}
+if ($selected_sido !== '') {
+    $where .= " and addr LIKE '%" . mysqli_real_escape_string($conn, $selected_sido) . "%'";
+}
+if ($selected_gugun !== '') {
+    $where .= " and addr LIKE '%" . mysqli_real_escape_string($conn, $selected_gugun) . "%'";
 }
 
 $total_cnt = sql_cnt('auctions', $where);
@@ -395,8 +484,76 @@ $offset = ($page - 1) * $limit;
 $auctions_list = sql_one('auctions', '*', $where . " order by no desc limit $offset, $limit");
 ?>
 
+<!-- 시/도별 (1차) > 시/군/구별 (2차) 주소 그룹핑 연동 검색 필터 -->
+<form method="get" action="index.php#live" style="background:#fff; border:1px solid #CBD5E1; border-radius:14px; padding:18px 24px; margin-bottom:28px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; box-shadow:0 4px 15px rgba(0,0,0,0.04);">
+    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; flex:1;">
+        <span style="font-weight:900; font-size:0.95rem; color:#0F172A; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-location-dot" style="color:#0077B6;"></i> 지역 필터 (1차/2차):
+        </span>
+
+        <!-- 1차 시/도 Select Box -->
+        <select name="sido" id="sidoSelect" onchange="updateGugunOptions()" style="padding:10px 16px; border:1px solid #CBD5E1; border-radius:8px; font-size:0.9rem; font-weight:700; background:#fff; color:#0F172A; min-width:160px; cursor:pointer;">
+            <option value="">전체 시/도 (1차)</option>
+            <?php foreach (array_keys($location_map) as $s_item): ?>
+                <option value="<?php echo htmlspecialchars($s_item); ?>" <?php echo $selected_sido === $s_item ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($s_item); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+
+        <!-- 2차 시/군/구 Select Box -->
+        <select name="gugun" id="gugunSelect" style="padding:10px 16px; border:1px solid #CBD5E1; border-radius:8px; font-size:0.9rem; font-weight:700; background:#fff; color:#0F172A; min-width:160px; cursor:pointer;">
+            <option value="">전체 시/군/구 (2차)</option>
+        </select>
+
+        <input type="hidden" name="cat" value="<?php echo htmlspecialchars($cat); ?>">
+
+        <button type="submit" class="btn btn-primary" style="padding:10px 22px; font-weight:800; font-size:0.9rem;">
+            <i class="fa-solid fa-magnifying-glass"></i> 조회
+        </button>
+    </div>
+
+    <?php if ($selected_sido !== '' || $selected_gugun !== ''): ?>
+        <a href="index.php?cat=<?php echo urlencode($cat); ?>#live" class="btn btn-outline btn-sm" style="color:#EF4444; border-color:#FCA5A5; font-weight:700;">
+            <i class="fa-solid fa-rotate-left"></i> 지역 필터 초기화
+        </a>
+    <?php endif; ?>
+</form>
+
+<script>
+var locationData = <?php echo json_encode($location_map, JSON_UNESCAPED_UNICODE); ?>;
+var currentSido = <?php echo json_encode($selected_sido, JSON_UNESCAPED_UNICODE); ?>;
+var currentGugun = <?php echo json_encode($selected_gugun, JSON_UNESCAPED_UNICODE); ?>;
+
+function updateGugunOptions() {
+    var sidoSel = document.getElementById('sidoSelect');
+    var gugunSel = document.getElementById('gugunSelect');
+    var chosenSido = sidoSel.value;
+
+    gugunSel.innerHTML = '<option value="">전체 시/군/구 (2차)</option>';
+
+    if (chosenSido && locationData[chosenSido]) {
+        var list = locationData[chosenSido];
+        for (var i = 0; i < list.length; i++) {
+            var opt = document.createElement('option');
+            opt.value = list[i];
+            opt.textContent = list[i];
+            if (list[i] === currentGugun && chosenSido === currentSido) {
+                opt.selected = true;
+            }
+            gugunSel.appendChild(opt);
+        }
+    }
+}
+
+// 페이지 로드시 2차 구/군 옵션 동기화
+document.addEventListener('DOMContentLoaded', function() {
+    updateGugunOptions();
+});
+</script>
+
 <div class="auc-filter">
-    <a href="index.php?cat=#apply" class="<?php echo $cat === '' ? 'active' : ''; ?>"><i class="fa-solid fa-boxes-stacked"></i> 전체 시공 구분</a>
+    <a href="index.php?cat=&sido=<?php echo urlencode($selected_sido); ?>&gugun=<?php echo urlencode($selected_gugun); ?>#live" class="<?php echo $cat === '' ? 'active' : ''; ?>"><i class="fa-solid fa-boxes-stacked"></i> 전체 시공 구분</a>
     <?php foreach ($sub_categories as $sc): 
         $sc_name = $sc['cat_name'];
         $sc_key = '';
@@ -413,7 +570,7 @@ $auctions_list = sql_one('auctions', '*', $where . " order by no desc limit $off
         elseif (mb_strpos($sc_name, '자동차') !== false || mb_strpos($sc_name, '차량') !== false) $icon_cls = 'fa-car';
         elseif (mb_strpos($sc_name, 'DIY') !== false || mb_strpos($sc_name, '자가') !== false) $icon_cls = 'fa-wrench';
     ?>
-        <a href="index.php?cat=<?php echo urlencode($sc_key ?: $sc_name); ?>#apply" class="<?php echo $is_act ? 'active' : ''; ?>">
+        <a href="index.php?cat=<?php echo urlencode($sc_key ?: $sc_name); ?>&sido=<?php echo urlencode($selected_sido); ?>&gugun=<?php echo urlencode($selected_gugun); ?>#live" class="<?php echo $is_act ? 'active' : ''; ?>">
             <i class="fa-solid <?php echo $icon_cls; ?>"></i> <?php echo htmlspecialchars($sc_name); ?>
         </a>
     <?php endforeach; ?>

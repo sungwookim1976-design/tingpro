@@ -61,12 +61,13 @@ include_once __DIR__ . "/inc/header.php";
     .hero-slide.active .slide-bg {
         transform: scale(1.04);
     }
-    /* 배경 농도(어두움)를 훨씬 밝게 낮춤 (overlay opacity low) */
+    /* 검정색 오퍼시티 레이어를 적용하여 배경을 어둡게 하고 글자를 명확히 부각 */
     .hero-slide .slide-overlay {
         position: absolute;
         inset: 0;
         z-index: 1;
-        background: linear-gradient(180deg, rgba(11, 19, 43, 0.15) 0%, rgba(11, 19, 43, 0.42) 100%);
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.72) 100%);
+        backdrop-filter: contrast(1.1);
     }
     .hero-slide .slide-content {
         position: relative;
@@ -198,10 +199,10 @@ include_once __DIR__ . "/inc/header.php";
                 </p>
                 <div class="slide-cta-group">
                     <a href="./calculator/index.php" class="btn btn-accent" style="padding:14px 32px; font-size:1.05rem; box-shadow:0 8px 25px rgba(255,107,53,0.5);">
-                        <i class="fa-solid fa-calculator"></i> 1초 실시간 견적 확인
+                        <i class="fa-solid fa-calculator"></i> 실시간 견적 확인
                     </a>
-                    <a href="./gallery/index.php" class="btn-slide-outline">
-                        <i class="fa-solid fa-circle-play"></i> 시공 전후 비교 보기
+                    <a href="./gallery/index.php?cat=아파트%2F주택베란다" class="btn-slide-outline">
+                        <i class="fa-solid fa-house-chimney-window"></i> 아파트/주택 시공 갤러리
                     </a>
                 </div>
             </div>
@@ -225,10 +226,10 @@ include_once __DIR__ . "/inc/header.php";
                 </p>
                 <div class="slide-cta-group">
                     <a href="./calculator/index.php" class="btn btn-accent" style="padding:14px 32px; font-size:1.05rem; box-shadow:0 8px 25px rgba(255,107,53,0.5);">
-                        <i class="fa-solid fa-calculator"></i> 1초 실시간 견적 확인
+                        <i class="fa-solid fa-calculator"></i> 실시간 견적 확인
                     </a>
-                    <a href="./gallery/index.php" class="btn-slide-outline">
-                        <i class="fa-solid fa-images"></i> 건물 시공 갤러리
+                    <a href="./gallery/index.php?cat=빌딩&amp;tab=quote" class="btn-slide-outline">
+                        <i class="fa-solid fa-city"></i> 건물 시공 갤러리
                     </a>
                 </div>
             </div>
@@ -251,9 +252,9 @@ include_once __DIR__ . "/inc/header.php";
                     야간 운전에도 눈이 편안한 최고급 열차단 필름 시공.
                 </p>
                 <div class="slide-cta-group">
-                    <a href="./calculator/index.php" class="btn btn-accent" style="padding:14px 32px; font-size:1.05rem; box-shadow:0 8px 25px rgba(255,107,53,0.5);">
-                        <i class="fa-solid fa-calculator"></i> 차종별 견적 뽑기
-                    </a>
+                    <button type="button" onclick="openQuickConsultModal('간편견적')" class="btn btn-accent" style="padding:14px 32px; font-size:1.05rem; box-shadow:0 8px 25px rgba(255,107,53,0.5); border:none; cursor:pointer;">
+                        <i class="fa-solid fa-calculator"></i> 간편 견적 서비스 신청
+                    </button>
                     <a href="./gallery/index.php" class="btn-slide-outline">
                         <i class="fa-solid fa-star"></i> 고객 실제 시공후기
                     </a>
@@ -278,10 +279,10 @@ include_once __DIR__ . "/inc/header.php";
                     시공 도구 풀세트 무상 증정 및 가이드 영상 제공.
                 </p>
                 <div class="slide-cta-group">
-                    <a href="./calculator/index.php" class="btn btn-accent" style="padding:14px 32px; font-size:1.05rem; box-shadow:0 8px 25px rgba(255,107,53,0.5);">
+                    <a href="./diy/index.php?cat=DIY%EC%9E%90%EA%B0%80%EC%84%A4%EC%B9%98" class="btn btn-accent" style="padding:14px 32px; font-size:1.05rem; box-shadow:0 8px 25px rgba(255,107,53,0.5);">
                         <i class="fa-solid fa-cart-shopping"></i> DIY 키트 주문하기
                     </a>
-                    <a href="./gallery/index.php" class="btn-slide-outline">
+                    <a href="./comm/selfvod.php" class="btn-slide-outline">
                         <i class="fa-solid fa-play"></i> DIY 셀프 시공방법 영상
                     </a>
                 </div>
@@ -739,7 +740,7 @@ $total_case_cnt = is_array($main_cases) ? count($main_cases) : 0;
         <!-- Board Table Card Wrapper -->
         <div style="background:#FFFFFF; border:1px solid #CBD5E1; border-radius:var(--radius-lg); overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.04);">
             <div class="table-responsive" style="overflow-x:auto; -webkit-overflow-scrolling:touch;">
-                <table style="width:100%; min-width:720px; border-collapse:collapse; text-align:left; font-size:0.95rem;">
+                <table class="main-auc-table" style="width:100%; border-collapse:collapse; text-align:left; font-size:0.95rem;">
                     <thead>
                         <tr style="background:#F8FAFC; border-bottom:2px solid #E2E8F0; color:#475569; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px;">
                             <th style="padding:16px 20px; width:100px;">상태</th>
@@ -774,24 +775,38 @@ $total_case_cnt = is_array($main_cases) ? count($main_cases) : 0;
                             }
                         ?>
                             <tr onclick="location.href='<?php echo $ma_url; ?>'" style="border-bottom:1px solid #F1F5F9; transition:background 0.2s; cursor:pointer;" onmouseover="this.style.background='#F8FAFC'" onmouseout="this.style.background='white'">
-                                <td style="padding:16px 20px;"><?php echo $st_badge; ?></td>
-                                <td style="padding:16px 20px; font-weight:700; color:var(--primary-dark);">
+                                <td style="padding:16px 20px;">
+                                    <div style="display:flex; align-items:center; gap:8px;">
+                                        <?php echo $st_badge; ?>
+                                        <span class="mobile-only-badge" style="font-weight:700; color:var(--primary-dark); font-size:0.85rem;">
+                                            <i class="fa-solid fa-building-user"></i> <?php echo htmlspecialchars($ma['space_type']); ?>
+                                        </span>
+                                        <span class="mobile-only-badge" style="background:#E0F2FE; color:#0369A1; font-weight:800; font-size:0.75rem; padding:2px 8px; border-radius:12px; margin-left:auto;">
+                                            <?php echo (int)$ma['bid_count']; ?>건 입찰
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="desktop-only-td" style="padding:16px 20px; font-weight:700; color:var(--primary-dark);">
                                     <i class="fa-solid fa-building-user"></i> <?php echo htmlspecialchars($ma['space_type']); ?>
                                 </td>
                                 <td style="padding:16px 20px;">
                                     <a href="<?php echo $ma_url; ?>" style="text-decoration:none; color:#0F172A; font-weight:800; display:block; margin-bottom:2px;">
                                         <?php echo htmlspecialchars($ma_short_addr); ?> <?php echo (int)$ma['py'] > 0 ? (int)$ma['py'] . '평 ' : ''; ?><?php echo htmlspecialchars($ma['space_type']); ?> 썬팅 시공 역경매
                                     </a>
-                                    <span style="font-size:0.82rem; color:#64748B;"><?php echo htmlspecialchars($ma['memo'] ? $ma['memo'] : '검증 틴팅프로 입찰 모집 중'); ?></span>
+                                    <span style="font-size:0.82rem; color:#64748B; display:block;"><?php echo htmlspecialchars($ma['memo'] ? $ma['memo'] : '검증 틴팅프로 입찰 모집 중'); ?></span>
+                                    <div class="mobile-auc-bottom" style="display:none; justify-content:space-between; align-items:center; margin-top:10px; border-top:1px dashed #E2E8F0; padding-top:8px; font-size:0.82rem; color:#64748B;">
+                                        <span>희망예산: <strong style="color:var(--primary-dark); font-size:0.95rem; font-weight:900;"><?php echo number_format($ma['desired_price']); ?>원</strong></span>
+                                        <span><?php echo substr($ma['reg_date'], 0, 10); ?></span>
+                                    </div>
                                 </td>
-                                <td style="padding:16px 20px; color:#475569; font-size:0.9rem;"><?php echo htmlspecialchars($ma_short_addr); ?></td>
-                                <td style="padding:16px 20px; text-align:right; font-weight:900; color:var(--primary-dark);">
+                                <td class="desktop-only-td" style="padding:16px 20px; color:#475569; font-size:0.9rem;"><?php echo htmlspecialchars($ma_short_addr); ?></td>
+                                <td class="desktop-only-td" style="padding:16px 20px; text-align:right; font-weight:900; color:var(--primary-dark);">
                                     <?php echo number_format($ma['desired_price']); ?>원
                                 </td>
-                                <td style="padding:16px 20px; text-align:center;">
+                                <td class="desktop-only-td" style="padding:16px 20px; text-align:center;">
                                     <span style="background:#E0F2FE; color:#0369A1; font-weight:800; font-size:0.8rem; padding:2px 8px; border-radius:12px;"><?php echo (int)$ma['bid_count']; ?>건 입찰</span>
                                 </td>
-                                <td style="padding:16px 20px; text-align:right; color:#94A3B8; font-size:0.85rem;"><?php echo substr($ma['reg_date'], 0, 10); ?></td>
+                                <td class="desktop-only-td" style="padding:16px 20px; text-align:right; color:#94A3B8; font-size:0.85rem;"><?php echo substr($ma['reg_date'], 0, 10); ?></td>
                             </tr>
                         <?php endforeach; endif; ?>
                     </tbody>

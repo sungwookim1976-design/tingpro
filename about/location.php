@@ -1,5 +1,5 @@
 <?php
-$page_title = "오시는 길 | 회사소개 | 틴팅 마스터 VULUX";
+$page_title = "오시는 길 | 회사소개 | TINTING PRO";
 $active_menu = "about";
 $path_prefix = "../";
 
@@ -7,26 +7,26 @@ include_once __DIR__ . "/../inc/head.php";
 include_once __DIR__ . "/../inc/header.php";
 ?>
 
-<div style="background:linear-gradient(135deg, #0077B6 0%, #00B4D8 100%); padding:60px 24px; text-align:center; color:white;">
-    <span style="background:rgba(255,255,255,0.2); font-size:0.85rem; padding:4px 14px; border-radius:20px; font-weight:700; letter-spacing:1px; text-transform:uppercase;">VULUX LOCATION</span>
+<div class="sub-hero hero-mobile-pad" style="background:linear-gradient(135deg, #0077B6 0%, #00B4D8 100%); padding:60px 24px; text-align:center; color:white;">
+    <span style="background:rgba(255,255,255,0.2); font-size:0.85rem; padding:4px 14px; border-radius:20px; font-weight:700; letter-spacing:1px; text-transform:uppercase;">TINTING PRO LOCATION</span>
     <h1 style="font-size:2.5rem; font-weight:900; margin:12px 0 8px 0;">오시는 길 (대리점 &amp; 서비스센터)</h1>
-    <p style="font-size:1.1rem; opacity:0.9; max-width:600px; margin:0 auto;">틴팅 마스터 VULUX 대리점 및 전국 지역별 서비스센터 위치를 안내해 드립니다.</p>
+    <p style="font-size:1.1rem; opacity:0.9; max-width:600px; margin:0 auto;">TINTING PRO 대리점 및 전국 지역별 서비스센터 위치를 안내해 드립니다.</p>
 </div>
 
-<div class="container" style="max-width:1280px; margin:0 auto; padding:60px 24px;">
+<div class="container container-mobile-pad" style="max-width:1280px; margin:0 auto; padding:60px 24px;">
     
-    <div style="display:grid; grid-template-columns:1fr 400px; gap:36px; margin-bottom:48px; align-items:start;">
+    <div class="mobile-grid-1col" style="display:grid; grid-template-columns:1fr 400px; gap:36px; margin-bottom:48px; align-items:start;">
         
         <div style="background:white; border:1px solid #CBD5E1; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-md); position:relative;">
-            <div style="height:460px; background:#E2E8F0 url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1200&q=80') no-repeat center / cover; position:relative;">
+            <div style="min-height:360px; height:460px; background:#E2E8F0 url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1200&q=80') no-repeat center / cover; position:relative;">
                 <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(15, 23, 42, 0.35);"></div>
                 
-                <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(255,255,255,0.96); padding:20px 28px; border-radius:16px; box-shadow:0 15px 35px rgba(0,0,0,0.25); text-align:center; border:2px solid #0077B6;">
+                <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(255,255,255,0.96); padding:20px 24px; width:min(340px, 88vw); border-radius:16px; box-shadow:0 15px 35px rgba(0,0,0,0.25); text-align:center; border:2px solid #0077B6;">
                     <div style="width:48px; height:48px; background:#0077B6; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px auto; font-size:1.4rem; box-shadow:0 4px 12px rgba(0,119,182,0.4);">
                         <i class="fa-solid fa-location-dot"></i>
                     </div>
-                    <strong style="font-size:1.2rem; color:#0F172A; display:block;">틴팅 마스터 VULUX 대리점</strong>
-                    <span style="font-size:0.88rem; color:#475569; display:block; margin-top:4px;">서울특별시 서초구 마방로4길 16-17 (양재동)</span>
+                    <strong style="font-size:1.15rem; color:#0F172A; display:block;">TINTING PRO 대리점</strong>
+                    <span style="font-size:0.85rem; color:#475569; display:block; margin-top:4px;">서울특별시 서초구 마방로4길 16-17 (양재동)</span>
                     <a href="https://map.kakao.com" target="_blank" class="btn btn-primary btn-sm" style="margin-top:12px; display:inline-block;">
                         <i class="fa-solid fa-map-location-dot"></i> 카카오맵 지도 보기
                     </a>

@@ -122,7 +122,13 @@ include_once __DIR__ . "/../inc/header.php";
 
             <div class="input-box">
                 <label>아이디 (이메일 주소) <span class="req">*</span></label>
-                <input type="email" name="email" required placeholder="example@email.com (로그인 아이디로 사용)" value="<?php echo isset($_GET['email']) ? htmlspecialchars($_GET['email']) : (isset($_GET['uid']) ? htmlspecialchars($_GET['uid']) : ''); ?>">
+                <div style="display:flex; gap:8px;">
+                    <input type="email" name="email" id="join_email" required placeholder="example@email.com (로그인 아이디로 사용)" value="<?php echo isset($_GET['email']) ? htmlspecialchars($_GET['email']) : (isset($_GET['uid']) ? htmlspecialchars($_GET['uid']) : ''); ?>" oninput="resetJoinEmailCheck()">
+                    <button type="button" onclick="checkJoinEmailDup()" class="btn btn-outline" style="padding:10px 16px; font-size:0.88rem; font-weight:800; background:white; border-color:var(--primary-dark); color:var(--primary-dark); white-space:nowrap;">
+                        <i class="fa-solid fa-magnifying-glass"></i> 중복검사
+                    </button>
+                </div>
+                <div id="join_email_msg" style="font-size:0.82rem; margin-top:6px; font-weight:700;"></div>
                 <div class="hint">서비스 로그인 시 사용할 이메일 주소를 입력해 주세요.</div>
             </div>
 
@@ -211,6 +217,48 @@ include_once __DIR__ . "/../inc/header.php";
 </div>
 
 <script>
+    let isJoinEmailChecked = false;
+
+    function resetJoinEmailCheck() {
+        isJoinEmailChecked = false;
+        const msgEl = document.getElementById('join_email_msg');
+        if (msgEl) {
+            msgEl.style.color = '#D97706';
+            msgEl.innerHTML = '아이디(이메일) 중복검사를 진행해 주세요.';
+        }
+    }
+
+    function checkJoinEmailDup() {
+        const emailInput = document.getElementById('join_email');
+        const emailVal = emailInput.value.trim();
+        const msgEl = document.getElementById('join_email_msg');
+
+        if (!emailVal || !emailVal.includes('@')) {
+            alert('올바른 이메일 주소를 입력해 주세요.');
+            emailInput.focus();
+            return;
+        }
+
+        fetch('check_email_ajax.php?email=' + encodeURIComponent(emailVal))
+            .then(res => res.json())
+            .then(data => {
+                if (data.exists) {
+                    isJoinEmailChecked = false;
+                    msgEl.style.color = '#EF4444';
+                    msgEl.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> ' + data.msg;
+                    alert(data.msg);
+                } else {
+                    isJoinEmailChecked = true;
+                    msgEl.style.color = '#059669';
+                    msgEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + data.msg;
+                    alert(data.msg);
+                }
+            })
+            .catch(err => {
+                alert('중복검사 중 오류가 발생했습니다.');
+            });
+    }
+
     function selectMemType(type) {
         document.getElementById('memType').value = type;
         document.querySelectorAll('.join-type-tab').forEach(function (el) {
@@ -224,12 +272,19 @@ include_once __DIR__ . "/../inc/header.php";
     }
 
     document.getElementById('joinForm').addEventListener('submit', function (e) {
+        if (!isJoinEmailChecked) {
+            e.preventDefault();
+            alert('아이디 (이메일 주소) 중복검사를 완료해 주세요.');
+            document.getElementById('join_email').focus();
+            return false;
+        }
         var pw = this.passwd.value;
         var pw2 = this.passwd2.value;
         if (pw !== pw2) {
             e.preventDefault();
             alert('비밀번호가 일치하지 않습니다.');
             this.passwd2.focus();
+            return false;
         }
     });
 

@@ -79,6 +79,12 @@ include_once __DIR__ . "/../inc/adm_head.php";
         </div>
 
         <div class="adm-form-row">
+            <label><i class="fa-brands fa-youtube" style="color:#FF0000; margin-right:4px;"></i> 유튜브 연동 URL (선택)</label>
+            <input type="text" name="youtube_url" value="<?php echo ($row && isset($row['youtube_url'])) ? htmlspecialchars($row['youtube_url']) : ''; ?>" placeholder="예: https://www.youtube.com/watch?v=영상ID 또는 https://youtu.be/영상ID">
+            <p style="font-size:0.78rem; color:var(--adm-muted); margin-top:5px;">유튜브 영상 URL을 등록하시면 셀프시공 VOD 갤러리 및 게시물에 동영상 플레이어가 자동 연동됩니다.</p>
+        </div>
+
+        <div class="adm-form-row">
             <label>내용</label>
             <textarea id="content" name="content"><?php echo $row ? htmlspecialchars($row['content']) : ''; ?></textarea>
         </div>
